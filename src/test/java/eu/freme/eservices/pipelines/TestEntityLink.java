@@ -22,7 +22,7 @@ public class TestEntityLink extends LocalServerTestBase {
 	@Test
 	public void test() throws UnirestException, IOException {
 		String data = "A court in Libya has sentenced Saif al-Islam Gaddafi, son of deposed leader Col Muammar Gaddafi, and eight others to death over war crimes linked to the 2011 revolution.";
-		SerializedRequest entityRequest = createEntityRequest(data);
+		SerializedRequest entityRequest = createEntityRequestSpotlight(data);
 		SerializedRequest[] serializedRequests = {entityRequest};
 
 		HttpResponse<String> response = Unirest.post("http://localhost:8080/pipelining/chain")
@@ -34,19 +34,20 @@ public class TestEntityLink extends LocalServerTestBase {
 		Unirest.shutdown();
 	}
 
-	private SerializedRequest createEntityRequest(final String textToEnrich) {
+	private SerializedRequest createEntityRequestSpotlight(final String textToEnrich) {
 
-		Map<String, String> parameters = new HashMap<>();
+		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("informat", "text");
 		parameters.put("outformat", "turtle");
 		parameters.put("language", "en");
+		parameters.put("input", textToEnrich);
 
 		return new SerializedRequest(
 				RequestType.POST,
-				"http://api.freme-project.eu/0.2/e-entity/freme-ner/documents",
+				"http://api.freme-project.eu/0.2/e-entity/dbpedia-spotlight/documents",
 				parameters,
 				null,
-				textToEnrich
+				null
 		);
 	}
 }

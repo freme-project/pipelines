@@ -10,11 +10,11 @@ import java.util.Map;
 public class SerializedRequest {
 	private RequestType type;
 	private String endpoint;
-	private Map<String, String> parameters;
+	private Map<String, Object> parameters;
 	private Map<String, String> headers;
 	private String body;	// only textual format for now...
 
-	public SerializedRequest(RequestType type, String endpoint, Map<String, String> parameters, Map<String, String> headers, String body) {
+	public SerializedRequest(RequestType type, String endpoint, Map<String, Object> parameters, Map<String, String> headers, String body) {
 		this.type = type;
 		this.endpoint = endpoint;
 		this.parameters = parameters;
@@ -30,7 +30,7 @@ public class SerializedRequest {
 		return endpoint;
 	}
 
-	public Map<String, String> getParameters() {
+	public Map<String, Object> getParameters() {
 		return parameters;
 	}
 
