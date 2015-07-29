@@ -40,14 +40,13 @@ public class TestEntityLink extends LocalServerTestBase {
 		parameters.put("informat", "text");
 		parameters.put("outformat", "turtle");
 		parameters.put("language", "en");
-		parameters.put("input", textToEnrich);
 
 		return new SerializedRequest(
 				RequestType.POST,
 				"http://api.freme-project.eu/0.2/e-entity/dbpedia-spotlight/documents",
 				parameters,
 				null,
-				null
+				textToEnrich
 		);
 	}
 }
