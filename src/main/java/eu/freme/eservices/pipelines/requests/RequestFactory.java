@@ -15,7 +15,7 @@ public class RequestFactory {
 
 	/**
 	 * Creates a default request to the e-Entity Spotlight service.
-	 * @param text		The text to enrich.
+	 * @param text		The text to enrich (plain text).
 	 * @param language	The language the text is in.
 	 * @return			A request that can still be modified.
 	 */
@@ -25,6 +25,30 @@ public class RequestFactory {
 				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
 				.parameter("language", language)
 				.body(text).build();
+	}
+
+	/**
+	 * Creates a default request to the e-Entity FREME NER service.
+	 * @param text		The text to enrich (plain text).
+	 * @param language  The language the text is in.
+	 * @param dataSet   The data set to use for enrichment.
+	 * @return        	A request that can still be modified.
+	 */
+	public static SerializedRequest createEntityFremeNER(final String text, final String language, final String dataSet) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_ENTITY_FREME_NER.getUri());
+		return builder
+				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
+				.parameter("language", language)
+				.parameter("dataset", dataSet)
+				.body(text)
+				.build();
+	}
+
+	public static SerializedRequest createLink(final String templateID) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_LINK.getUri());
+		return builder
+				.parameter("templateid", templateID)
+				.build();
 	}
 
 	public static String toJson(final List<SerializedRequest> requests) {

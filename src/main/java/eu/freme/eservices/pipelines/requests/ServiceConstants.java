@@ -5,7 +5,8 @@ package eu.freme.eservices.pipelines.requests;
  */
 public enum ServiceConstants {
 	E_ENTITY_SPOTLIGHT("/e-entity/dbpedia-spotlight/documents"),
-	E_ENTITY_FREME_NER("/e-entity/freme-ner/documents");
+	E_ENTITY_FREME_NER("/e-entity/freme-ner/documents"),
+	E_LINK("/e-link/documents/");
 
 	private final String uri;
 
