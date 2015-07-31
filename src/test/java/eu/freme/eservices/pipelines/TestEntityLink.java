@@ -26,7 +26,7 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
 		List<SerializedRequest> serializedRequests = Arrays.asList(entityRequest);
 
-		HttpResponse<String> response = Unirest.post("http://localhost:8080/pipelining/chain")
+		HttpResponse<String> response = Unirest.post("http://localhost:9000/pipelining/chain")
 				.body(new JsonNode(RequestFactory.toJson(serializedRequests)))
 				.asString();
 		System.out.println("response.getStatus() = " + response.getStatus());
