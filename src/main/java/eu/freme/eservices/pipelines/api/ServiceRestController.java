@@ -1,8 +1,8 @@
 package eu.freme.eservices.pipelines.api;
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.core.PipelineService;
+import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Gerald Haesendonck
@@ -23,8 +24,6 @@ import java.io.IOException;
 @SuppressWarnings("unused")
 public class ServiceRestController {
 
-	private final Gson gson = new Gson();
-
 	@Autowired
 	PipelineService pipelineAPI;
 
@@ -32,7 +31,7 @@ public class ServiceRestController {
 	public ResponseEntity<String> pipeline(@RequestBody String requests) throws IOException, UnirestException {
 		MultiValueMap<String, String> headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_TYPE, "text/plain");
-		SerializedRequest[] serializedRequests = gson.fromJson(requests, SerializedRequest[].class);
+		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 		return new ResponseEntity<>(pipelineAPI.chain(serializedRequests), headers, HttpStatus.OK);
 	}
 }

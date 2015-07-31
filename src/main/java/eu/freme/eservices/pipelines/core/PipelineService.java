@@ -8,6 +8,7 @@ import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.apache.http.HttpStatus;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Gerald Haesendonck
@@ -19,8 +20,8 @@ public class PipelineService {
 	 * @param serializedRequests  Requests to different services, serialized in JSON.
 	 * @return                    The result of the pipeline.
 	 */
-	public String chain(final SerializedRequest[] serializedRequests) throws IOException, UnirestException {
-		String body = serializedRequests[0].getBody();
+	public String chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException {
+		String body = serializedRequests.get(0).getBody();
 		for (SerializedRequest serializedRequest : serializedRequests) {
 			body = execute(serializedRequest, body);
 		}

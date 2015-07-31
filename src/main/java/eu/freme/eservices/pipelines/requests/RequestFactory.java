@@ -3,6 +3,7 @@ package eu.freme.eservices.pipelines.requests;
 import com.google.gson.Gson;
 import eu.freme.conversion.rdf.RDFConstants;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,5 +29,10 @@ public class RequestFactory {
 
 	public static String toJson(final List<SerializedRequest> requests) {
 		return gson.toJson(requests);
+	}
+
+	public static List<SerializedRequest> fromJson(final String serializedRequests) {
+		SerializedRequest[] requests = gson.fromJson(serializedRequests, SerializedRequest[].class);
+		return Arrays.asList(requests);
 	}
 }
