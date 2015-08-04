@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (C) 2015 Felix Sasaki (Felix.Sasaki@dfki.de)
+    Copyright (C) 2015 Deutsches Forschungszentrum für Künstliche Intelligenz (http://freme-project.eu)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -103,10 +103,10 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-					<header>APACHE-2.txt</header>
+					<header>https://raw.githubusercontent.com/mycila/license-maven-plugin/master/license-maven-plugin/src/main/resources/com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
 					<properties>
-						<owner>Felix Sasaki</owner>
-						<email>Felix.Sasaki@dfki.de</email>
+						<owner>Deutsches Forschungszentrum für Künstliche Intelligenz</owner>
+						<email>http://freme-project.eu</email>
 					</properties>
 					<excludes>
 						<exclude>**/README</exclude>
@@ -115,6 +115,7 @@
 						<exclude>logs/**</exclude>
 						<exclude>changelog.txt</exclude>
 						<exclude>LICENSE</exclude>
+						<exclude>3RD-PARTY-LICENCES</exclude>
 					</excludes>
 				</configuration>
 				<executions>
