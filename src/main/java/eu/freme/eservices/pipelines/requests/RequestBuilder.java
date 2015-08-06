@@ -31,7 +31,8 @@ public class RequestBuilder {
 
 		// the default values:
 		requestType = RequestType.POST;
-		baseEndpoint = "http://api.freme-project.eu/0.2";
+		//baseEndpoint = "http://api.freme-project.eu/0.2";
+		baseEndpoint = "http://api.freme-project.eu/current";
 		informat = TURTLE;
 		outformat = TURTLE;
 		prefix = "http://freme-project.eu/";

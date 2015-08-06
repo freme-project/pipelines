@@ -2,6 +2,7 @@ package eu.freme.eservices.pipelines.api;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.core.PipelineService;
+import eu.freme.eservices.pipelines.core.ServiceException;
 import eu.freme.eservices.pipelines.requests.RequestBuilder;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
@@ -44,6 +45,10 @@ public class ServiceRestController {
 		MultiValueMap<String, String> headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_TYPE, "text/plain");
 		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
-		return new ResponseEntity<>(pipelineAPI.chain(serializedRequests), headers, HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(pipelineAPI.chain(serializedRequests), headers, HttpStatus.OK);
+		} catch (ServiceException serviceError) {
+			return new ResponseEntity<>(serviceError.getMessage(), serviceError.getStatus());
+		}
 	}
 }

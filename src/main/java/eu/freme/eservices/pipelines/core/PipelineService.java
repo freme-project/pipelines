@@ -5,7 +5,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +20,7 @@ public class PipelineService {
 	 * @param serializedRequests  Requests to different services, serialized in JSON.
 	 * @return                    The result of the pipeline.
 	 */
-	public String chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException {
+	public String chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
 		String body = serializedRequests.get(0).getBody();
 		for (SerializedRequest serializedRequest : serializedRequests) {
 			body = execute(serializedRequest, body);
@@ -28,7 +28,7 @@ public class PipelineService {
 		return body;
 	}
 
-	private String execute(final SerializedRequest request, final String body) throws UnirestException, IOException {
+	private String execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
 		switch (request.getType()) {
 			case GET:
 				throw new UnsupportedOperationException("GET is not supported at this moment.");
@@ -47,9 +47,13 @@ public class PipelineService {
 				} else {
 					response = req.asString();
 				}
-				if (response.getStatus() != HttpStatus.SC_OK) {    // TODO: check for other status that could be OK
-					throw new IOException("Request to " + request.getEndpoint() + " failed. Response from server: " + response.getStatusText());
-					// TODO:
+				if (!HttpStatus.Series.valueOf(response.getStatus()).equals(HttpStatus.Series.SUCCESSFUL)) {
+					String errorBody = response.getBody();
+					HttpStatus status = HttpStatus.valueOf(response.getStatus());
+					if (errorBody == null || errorBody.isEmpty()) {
+						errorBody = "No reason given by service.";
+					}
+					throw new ServiceException(errorBody, status);
 				}
 				return response.getBody();
 		}
