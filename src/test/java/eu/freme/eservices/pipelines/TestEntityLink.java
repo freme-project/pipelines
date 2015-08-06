@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -61,6 +62,7 @@ public class TestEntityLink extends LocalServerTestBase {
 	 * e-Entity using an unexisting data set to test error reporting.
 	 */
 	@Test
+	@Ignore
 	public void testWrongDatasetEntity() throws IOException, UnirestException {
 		String data = "This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "anunexistingdatabase");
