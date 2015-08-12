@@ -17,7 +17,7 @@ public class RequestFactory {
 	 * Creates a default request to the e-Entity Spotlight service.
 	 * @param text		The text to enrich (plain text).
 	 * @param language	The language the text is in.
-	 * @return			A request for e-Entity Spotlight that can still be modified.
+	 * @return			A request for e-Entity Spotlight.
 	 */
 	public static SerializedRequest createEntitySpotlight(final String text, final String language) {
 		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_ENTITY_SPOTLIGHT.getUri());
@@ -32,7 +32,7 @@ public class RequestFactory {
 	 * @param text		The text to enrich (plain text).
 	 * @param language  The language the text is in.
 	 * @param dataSet   The data set to use for enrichment.
-	 * @return        	A request for e-Entity FREME NER that can still be modified.
+	 * @return        	A request for e-Entity FREME NER.
 	 */
 	public static SerializedRequest createEntityFremeNER(final String text, final String language, final String dataSet) {
 		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_ENTITY_FREME_NER.getUri());
@@ -47,12 +47,41 @@ public class RequestFactory {
 	/**
 	 * Creates a default request to the e-Link service.
 	 * @param templateID	The template ID to use for linking.
-	 * @return				A request for e-Link that can still be modified
+	 * @return				A request for e-Link.
+	 */
+	public static SerializedRequest createLink(final String templateID, final String input) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_LINK.getUri());
+		return builder
+				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
+				.parameter("templateid", templateID)
+				.body(input).build();
+	}
+
+	/**
+	 * Creates a default request to the e-Link service without input. This is used when the input is the output of
+	 * another request.
+	 * @param templateID	The template ID to use for linking.
+	 * @return				A request for e-Link.
 	 */
 	public static SerializedRequest createLink(final String templateID) {
 		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_LINK.getUri());
 		return builder
 				.parameter("templateid", templateID)
+				.build();
+	}
+
+	/**
+	 * Creates a default request to the e-Translate service without input. This is used when the input is the output of
+	 * another request.
+	 * @param sourceLang 	The source language.
+	 * @param targetLang	The target language.
+	 * @return				A request for e-Translate.
+	 */
+	public static SerializedRequest createTranslation(final String sourceLang, final String targetLang) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_TRANSLATION.getUri());
+		return builder
+				.parameter("source-lang", sourceLang)
+				.parameter("target-lang", targetLang)
 				.build();
 	}
 
