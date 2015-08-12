@@ -1,8 +1,6 @@
 package eu.freme.eservices.pipelines;
 
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
@@ -10,8 +8,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 /**
@@ -89,12 +85,5 @@ public class TestEntityLink extends LocalServerTestBase {
 		assertEquals("Wrong status code", 400, response.getStatus());
 		System.out.println("response.getStatusText() = " + response.getStatusText());
 		System.out.println("response.getBody() = " + response.getBody());
-	}
-
-	private HttpResponse<String> sendRequest(SerializedRequest entityRequest, SerializedRequest linkRequest) throws UnirestException {
-		List<SerializedRequest> serializedRequests = Arrays.asList(entityRequest, linkRequest);
-		return Unirest.post("http://localhost:9000/pipelining/chain")
-				.body(new JsonNode(RequestFactory.toJson(serializedRequests)))
-				.asString();
 	}
 }
