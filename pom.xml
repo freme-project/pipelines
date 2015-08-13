@@ -1,10 +1,28 @@
+<!--
+
+    Copyright (C) 2015 Deutsches Forschungszentrum für Künstliche Intelligenz (http://freme-project.eu)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>eu.freme</groupId>
-    <artifactId>pipelines</artifactId>
-    <version>0.3-SNAPSHOT</version>
-    <name>Pipelines</name>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.freme</groupId>
+	<artifactId>pipelines</artifactId>
+	<version>0.3-SNAPSHOT</version>
+	<name>Pipelines</name>
+	<inceptionYear>2015</inceptionYear>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -83,70 +101,145 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>${spring.boot.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
+	<build>
+		<plugins>
+			<plugin> <!-- set compiler to 1.7 source and target -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
 
-        <dependency>
-            <groupId>eu.freme</groupId>
-            <artifactId>conversion</artifactId>
-            <version>0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mashape.unirest</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>1.4.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-    </dependencies>
-    
-    
-    <distributionManagement>
-        <repository>
-            <id>freme-nexus</id>
-            <name>Internal Releases</name>
-            <url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>freme-nexus</id>
-            <name>Internal Releases</name>
-            <url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+			<plugin> <!-- build a jar with dependencies -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>eu.freme.eservices.epublishing.webservice.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<!-- this is used for inheritance merges -->
+						<phase>package</phase>
+						<!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<header>https://raw.githubusercontent.com/mycila/license-maven-plugin/master/license-maven-plugin/src/main/resources/com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+					<properties>
+						<owner>Deutsches Forschungszentrum für Künstliche Intelligenz</owner>
+						<email>http://freme-project.eu</email>
+					</properties>
+					<excludes>
+						<exclude>**/README</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/**</exclude>
+						<exclude>logs/**</exclude>
+						<exclude>changelog.txt</exclude>
+						<exclude>LICENSE</exclude>
+						<exclude>3RD-PARTY-LICENCES</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-    <scm>
-        <connection>scm:git:git@github.com:freme-project/pipelines.git</connection>
-        <url>scm:git:git@github.com/freme-project:pipelines.git</url>
-        <developerConnection>scm:git:git@github.com:freme-project/pipelines.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>${spring.boot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.freme</groupId>
+			<artifactId>conversion</artifactId>
+			<version>0.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mashape.unirest</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>1.4.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+	</dependencies>
+
+
+	<distributionManagement>
+		<repository>
+			<id>freme-nexus</id>
+			<name>Internal Releases</name>
+			<url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>freme-nexus</id>
+			<name>Internal Releases</name>
+			<url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:git@github.com:freme-project/pipelines.git</connection>
+		<url>scm:git:git@github.com/freme-project:pipelines.git</url>
+		<developerConnection>scm:git:git@github.com:freme-project/pipelines.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+
 </project>
