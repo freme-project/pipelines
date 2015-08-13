@@ -60,19 +60,6 @@ public class RequestFactory {
 	}
 
 	/**
-	 * Creates a default request to the e-Link service.
-	 * @param templateID	The template ID to use for linking.
-	 * @return				A request for e-Link.
-	 */
-	public static SerializedRequest createLink(final String templateID, final String input) {
-		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_LINK.getUri());
-		return builder
-				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
-				.parameter("templateid", templateID)
-				.body(input).build();
-	}
-
-	/**
 	 * Creates a default request to the e-Link service without input. This is used when the input is the output of
 	 * another request.
 	 * @param templateID	The template ID to use for linking.
@@ -86,6 +73,23 @@ public class RequestFactory {
 	}
 
 	/**
+	 * Creates a default request to the e-Translate service.
+	 * @param text			The input text to translate, in plain text.
+	 * @param sourceLang 	The source language.
+	 * @param targetLang	The target language.
+	 * @return				A request for e-Translate.
+	 */
+	public static SerializedRequest createTranslation(final String text, final String sourceLang, final String targetLang) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_TRANSLATION.getUri());
+		return builder
+				.parameter("source-lang", sourceLang)
+				.parameter("target-lang", targetLang)
+				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
+				.body(text)
+				.build();
+	}
+
+	/**
 	 * Creates a default request to the e-Translate service without input. This is used when the input is the output of
 	 * another request.
 	 * @param sourceLang 	The source language.
@@ -94,6 +98,21 @@ public class RequestFactory {
 	 */
 	public static SerializedRequest createTranslation(final String sourceLang, final String targetLang) {
 		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_TRANSLATION.getUri());
+		return builder
+				.parameter("source-lang", sourceLang)
+				.parameter("target-lang", targetLang)
+				.build();
+	}
+
+	/**
+	 * Creates a default request to the e-Terminology service without input. This is used when the input is the output of
+	 * another request.
+	 * @param sourceLang 	The source language.
+	 * @param targetLang	The target language.
+	 * @return				A request for e-Translate.
+	 */
+	public static SerializedRequest createTerminology(final String sourceLang, final String targetLang) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_TERMINOLOGY.getUri());
 		return builder
 				.parameter("source-lang", sourceLang)
 				.parameter("target-lang", targetLang)
