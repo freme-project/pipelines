@@ -26,6 +26,11 @@ import org.junit.Test;
  */
 public class TestEntityLinkTranslation extends LocalServerTestBase {
 
+	/**
+	 * e-Entity using the Spotlight NER , e-Link using template 3 (Geo pos), and e-Translate en -> fr on one sentence.
+	 * All should go well.
+	 * @throws UnirestException
+	 */
 	@Test
 	public void testSomethingThatWorks() throws UnirestException {
 		String data = "The Belfry in Ghent is one of the oldest buildings in Belgium.";
@@ -36,6 +41,27 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest, translateRequest);
 	}
 
+	/**
+	 * e-Entity using FREME NER, e-Link using template 3 (Geo pos), and e-Translate en -> nl on two paragraphs.
+	 * All should go well.
+	 * @throws UnirestException
+	 */
+	@Test
+	public void testALongerText() throws UnirestException {
+		String input = "With just 200,000 residents, Reykjavík ranks as one of Europe’s smallest capital cities. But when Iceland’s total population only hovers around 300,000, it makes sense that the capital is known as the “big city” and offers all the cultural perks of a much larger place.\n" +
+				"\n" +
+				"“From live music almost every night to cosy cafes, colourful houses and friendly cats roaming the street, Reykjavík has all the charms of a small town in a fun capital city,” said Kaelene Spence, ";
+		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(input, "en", "dbpedia");
+		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
+		SerializedRequest translateRequest = RequestFactory.createTranslation("en", "nl");
+
+		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest, translateRequest);
+	}
+
+	/**
+	 * A non-existing language pair is given; the the response should give "not acceptable".
+	 * @throws UnirestException
+	 */
 	@Test
 	public void testWrongLanguagePair() throws UnirestException {
 		String data = "The Belfry in Ghent is one of the oldest buildings in Belgium.";

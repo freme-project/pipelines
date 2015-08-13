@@ -22,8 +22,6 @@ import org.apache.http.HttpStatus;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
-
 /**
  * Some tests for the e-Entity, e-Link pipeline
  *
@@ -34,10 +32,9 @@ public class TestEntityLink extends LocalServerTestBase {
 	/**
 	 * e-Entity using the Spotlight NER and e-Link using template 3 (Geo pos). All should go well.
 	 * @throws UnirestException
-	 * @throws IOException
 	 */
 	@Test
-	public void testSpotlight() throws UnirestException, IOException {
+	public void testSpotlight() throws UnirestException {
 		//String data = "A court in Libya has sentenced Saif al-Islam Gaddafi, son of deposed leader Col Muammar Gaddafi, and eight others to death over war crimes linked to the 2011 revolution.";
 		String data = "This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
@@ -49,10 +46,9 @@ public class TestEntityLink extends LocalServerTestBase {
 	/**
 	 * e-Entity using FREME NER with database viaf and e-Link using template 3 (Geo pos). All should go well.
 	 * @throws UnirestException
-	 * @throws IOException
 	 */
 	@Test
-	public void testFremeNER() throws UnirestException, IOException {
+	public void testFremeNER() throws UnirestException {
 		String data = "This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "viaf");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
@@ -65,7 +61,7 @@ public class TestEntityLink extends LocalServerTestBase {
 	 */
 	@Test
 	@Ignore
-	public void testWrongDatasetEntity() throws IOException, UnirestException {
+	public void testWrongDatasetEntity() throws UnirestException {
 		String data = "This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "anunexistingdatabase");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
@@ -77,7 +73,7 @@ public class TestEntityLink extends LocalServerTestBase {
 	 * e-Entity using an unexisting language set to test error reporting.
 	 */
 	@Test
-	public void testWrongLanguageEntity() throws IOException, UnirestException {
+	public void testWrongLanguageEntity() throws UnirestException {
 		String data = "This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "zz", "viaf");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
