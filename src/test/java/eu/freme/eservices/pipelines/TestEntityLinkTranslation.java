@@ -35,4 +35,14 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 
 		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest, translateRequest);
 	}
+
+	@Test
+	public void testWrongLanguagePair() throws UnirestException {
+		String data = "The Belfry in Ghent is one of the oldest buildings in Belgium.";
+		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
+		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
+		SerializedRequest translateRequest = RequestFactory.createTranslation("es", "pt");
+
+		sendRequest(HttpStatus.SC_NOT_ACCEPTABLE, entityRequest, linkRequest, translateRequest);
+	}
 }

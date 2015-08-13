@@ -16,7 +16,7 @@
 package eu.freme.eservices.pipelines.api;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.eservices.pipelines.core.PipelineResponse;
 import eu.freme.eservices.pipelines.core.PipelineService;
 import eu.freme.eservices.pipelines.core.ServiceException;
 import eu.freme.eservices.pipelines.requests.RequestBuilder;
@@ -60,13 +60,14 @@ public class ServiceRestController {
 	public ResponseEntity<String> pipeline(@RequestBody String requests) throws IOException, UnirestException {
 		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 		try {
-			String pipelineResult = pipelineAPI.chain(serializedRequests);
-			RDFConstants.RDFSerialization returnedContentType = PipelineService.getContentTypeOfLastResponse(serializedRequests);
+			PipelineResponse pipelineResult = pipelineAPI.chain(serializedRequests);
 			MultiValueMap<String, String> headers = new HttpHeaders();
-			headers.add(HttpHeaders.CONTENT_TYPE, returnedContentType.contentType());
-			return new ResponseEntity<>(pipelineResult, headers, HttpStatus.OK);
+			headers.add(HttpHeaders.CONTENT_TYPE, pipelineResult.getContentType());
+			return new ResponseEntity<>(pipelineResult.getBody(), headers, HttpStatus.OK);
 		} catch (ServiceException serviceError) {
-			return new ResponseEntity<>(serviceError.getMessage(), serviceError.getStatus());
+			MultiValueMap<String, String> headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_TYPE, serviceError.getResponse().getContentType());
+			return new ResponseEntity<>(serviceError.getMessage(), headers, serviceError.getStatus());
 		}
 	}
 }

@@ -25,7 +25,6 @@ import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Gerald Haesendonck
@@ -37,15 +36,15 @@ public class PipelineService {
 	 * @param serializedRequests  Requests to different services, serialized in JSON.
 	 * @return                    The result of the pipeline.
 	 */
-	public String chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
-		String body = serializedRequests.get(0).getBody();
+	public PipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
+		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
 		for (SerializedRequest serializedRequest : serializedRequests) {
-			body = execute(serializedRequest, body);
+			lastResponse = execute(serializedRequest, lastResponse.getBody());
 		}
-		return body;
+		return lastResponse;
 	}
 
-	private String execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
+	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
 		switch (request.getType()) {
 			case GET:
 				throw new UnsupportedOperationException("GET is not supported at this moment.");
@@ -68,35 +67,12 @@ public class PipelineService {
 					String errorBody = response.getBody();
 					HttpStatus status = HttpStatus.valueOf(response.getStatus());
 					if (errorBody == null || errorBody.isEmpty()) {
-						errorBody = "No reason given by service.";
+						throw new ServiceException(new PipelineResponse( "No reason given by service.", RDFConstants.RDFSerialization.PLAINTEXT.contentType()), status);
+					} else {
+						throw new ServiceException(new PipelineResponse(errorBody, response.getHeaders().getFirst("content-type")), status);
 					}
-					throw new ServiceException(errorBody, status);
 				}
-				return response.getBody();
+				return new PipelineResponse(response.getBody(), response.getHeaders().getFirst("content-type"));
 		}
-	}
-
-	/**
-	 * Helper method that returns the content type of the response of the last request (or: the value of the 'accept'
-	 * header of the last request).
-	 * @param serializedRequests	The requests that (will) serve as input for the pipelining service.
-	 * @return						The content type of the response that the service will return.
-	 */
-	public static RDFConstants.RDFSerialization getContentTypeOfLastResponse(final List<SerializedRequest> serializedRequests) {
-		String contentType = "";
-		if (!serializedRequests.isEmpty()) {
-			SerializedRequest lastRequest = serializedRequests.get(serializedRequests.size() - 1);
-			Map<String, String> headers = lastRequest.getHeaders();
-			if (headers.containsKey("accept")) {
-				contentType = headers.get("accept");
-			} else {
-				Map<String, Object> parameters = lastRequest.getParameters();
-				if (parameters.containsKey("outformat")) {
-					contentType = parameters.get("outformat").toString();
-				}
-			}
-		}
-		RDFConstants.RDFSerialization serialization = RDFConstants.RDFSerialization.fromValue(contentType);
-		return serialization != null ? serialization : RDFConstants.RDFSerialization.TURTLE;
 	}
 }

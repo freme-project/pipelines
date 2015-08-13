@@ -15,26 +15,23 @@
  */
 package eu.freme.eservices.pipelines.core;
 
-import org.springframework.http.HttpStatus;
-
 /**
  * @author Gerald Haesendonck
  */
-public class ServiceException extends Exception {
-	final HttpStatus status;
-	final PipelineResponse response;
+public class PipelineResponse {
+	private final String body;
+	private final String contentType;
 
-	public ServiceException(PipelineResponse response, HttpStatus status) {
-		super(response.getBody());
-		this.status = status;
-		this.response = response;
+	public PipelineResponse(String body, String contentType) {
+		this.body = body;
+		this.contentType = contentType;
 	}
 
-	public HttpStatus getStatus() {
-		return status;
+	public String getBody() {
+		return body;
 	}
 
-	public PipelineResponse getResponse() {
-		return response;
+	public String getContentType() {
+		return contentType;
 	}
 }

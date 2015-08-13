@@ -20,7 +20,6 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.conversion.rdf.RDFConstants;
-import eu.freme.eservices.pipelines.core.PipelineService;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.junit.After;
@@ -28,6 +27,7 @@ import org.junit.Before;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -68,17 +68,42 @@ public abstract class LocalServerTestBase {
 		// print some response info
 		System.out.println("response.getStatus() = " + response.getStatus());
 		System.out.println("response.getStatusText() = " + response.getStatusText());
+		System.out.println("response.contentType = " + response.getHeaders().getFirst("content-type"));
 		System.out.println("response.getBody() = " + response.getBody());
 
 		RDFConstants.RDFSerialization responseContentType = RDFConstants.RDFSerialization.fromValue(response.getHeaders().getFirst("content-type"));
-		RDFConstants.RDFSerialization accept = PipelineService.getContentTypeOfLastResponse(serializedRequests);
+		RDFConstants.RDFSerialization accept = getContentTypeOfLastResponse(serializedRequests);
 		assertEquals(expectedResponseCode, response.getStatus());
 		if (expectedResponseCode / 100 != 2) {
-			assertEquals(RDFConstants.RDFSerialization.PLAINTEXT, responseContentType);
+			assertEquals(RDFConstants.RDFSerialization.JSON, responseContentType);
 		} else {
 			assertEquals(responseContentType, accept);
 		}
 
 		return response;
+	}
+
+	/**
+	 * Helper method that returns the content type of the response of the last request (or: the value of the 'accept'
+	 * header of the last request).
+	 * @param serializedRequests	The requests that (will) serve as input for the pipelining service.
+	 * @return						The content type of the response that the service will return.
+	 */
+	public static RDFConstants.RDFSerialization getContentTypeOfLastResponse(final List<SerializedRequest> serializedRequests) {
+		String contentType = "";
+		if (!serializedRequests.isEmpty()) {
+			SerializedRequest lastRequest = serializedRequests.get(serializedRequests.size() - 1);
+			Map<String, String> headers = lastRequest.getHeaders();
+			if (headers.containsKey("accept")) {
+				contentType = headers.get("accept");
+			} else {
+				Map<String, Object> parameters = lastRequest.getParameters();
+				if (parameters.containsKey("outformat")) {
+					contentType = parameters.get("outformat").toString();
+				}
+			}
+		}
+		RDFConstants.RDFSerialization serialization = RDFConstants.RDFSerialization.fromValue(contentType);
+		return serialization != null ? serialization : RDFConstants.RDFSerialization.TURTLE;
 	}
 }
