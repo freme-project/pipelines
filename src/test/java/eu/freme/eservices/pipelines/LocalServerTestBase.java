@@ -19,6 +19,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.eservices.pipelines.core.PipelineService;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.junit.After;
@@ -26,6 +28,8 @@ import org.junit.Before;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Gerald Haesendonck
@@ -48,15 +52,28 @@ public abstract class LocalServerTestBase {
 	/**
 	 * Sends the actual pipeline request. It serializes the request objects to JSON and puts this into the body of
 	 * the request.
+	 * @param expectedResponseCode	The expected HTTP response code. Will be checked against.
 	 * @param requests		The serialized requests to send.
 	 * @return				The result of the request. This can either be the result of the pipelined requests, or an
 	 *                      error response with some explanation what went wrong in the body.
 	 * @throws UnirestException
 	 */
-	protected HttpResponse<String> sendRequest(SerializedRequest... requests) throws UnirestException {
+	protected HttpResponse<String> sendRequest(int expectedResponseCode, SerializedRequest... requests) throws UnirestException {
 		List<SerializedRequest> serializedRequests = Arrays.asList(requests);
-		return Unirest.post("http://localhost:9000/pipelining/chain")
+
+		HttpResponse<String> response = Unirest.post("http://localhost:9000/pipelining/chain")
 				.body(new JsonNode(RequestFactory.toJson(serializedRequests)))
 				.asString();
+
+		RDFConstants.RDFSerialization responseContentType = RDFConstants.RDFSerialization.fromValue(response.getHeaders().getFirst("content-type"));
+		RDFConstants.RDFSerialization accept = PipelineService.getContentTypeOfLastResponse(serializedRequests);
+		assertEquals(expectedResponseCode, response.getStatus());
+		if (expectedResponseCode / 100 != 2) {
+			assertEquals(RDFConstants.RDFSerialization.PLAINTEXT, responseContentType);
+		} else {
+			assertEquals(responseContentType, accept);
+		}
+
+		return response;
 	}
 }

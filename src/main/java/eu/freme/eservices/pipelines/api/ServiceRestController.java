@@ -58,11 +58,13 @@ public class ServiceRestController {
 	 */
 	@RequestMapping(value = "/pipelining/chain", method = RequestMethod.POST)
 	public ResponseEntity<String> pipeline(@RequestBody String requests) throws IOException, UnirestException {
-		MultiValueMap<String, String> headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_TYPE, RDFConstants.RDFSerialization.TURTLE.contentType()); // TODO: look at output type of last request...
 		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 		try {
-			return new ResponseEntity<>(pipelineAPI.chain(serializedRequests), headers, HttpStatus.OK);
+			String pipelineResult = pipelineAPI.chain(serializedRequests);
+			RDFConstants.RDFSerialization returnedContentType = PipelineService.getContentTypeOfLastResponse(serializedRequests);
+			MultiValueMap<String, String> headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_TYPE, returnedContentType.contentType());
+			return new ResponseEntity<>(pipelineResult, headers, HttpStatus.OK);
 		} catch (ServiceException serviceError) {
 			return new ResponseEntity<>(serviceError.getMessage(), serviceError.getStatus());
 		}

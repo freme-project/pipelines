@@ -15,6 +15,7 @@
  */
 package eu.freme.eservices.pipelines.requests;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,7 +34,12 @@ public class SerializedRequest {
 		this.type = type;
 		this.endpoint = endpoint;
 		this.parameters = parameters;
-		this.headers = headers;
+		this.headers = new HashMap<>(headers.size(), 1);
+
+		// convert header names to lowercase (not their values). This is important for further processing...
+		for (Map.Entry<String, String> header2value : headers.entrySet()) {
+			this.headers.put(header2value.getKey().toLowerCase(), header2value.getValue());
+		}
 		this.body = body;
 	}
 

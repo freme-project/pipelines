@@ -19,12 +19,12 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
+import org.apache.http.HttpStatus;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
 /**
  * Some tests for the e-Entity, e-Link pipeline
  *
@@ -44,9 +44,8 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(entityRequest, linkRequest);
+		HttpResponse<String> response = sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
 		System.out.println("response.getStatus() = " + response.getStatus());
-		assertEquals("Wrong status code", 200, response.getStatus());
 		System.out.println("response.getStatusText() = " + response.getStatusText());
 		System.out.println("response.getBody() = " + response.getBody());
 	}
@@ -62,9 +61,8 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "viaf");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(entityRequest, linkRequest);
+		HttpResponse<String> response = sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
 		System.out.println("response.getStatus() = " + response.getStatus());
-		assertEquals("Wrong status code", 200, response.getStatus());
 		System.out.println("response.getStatusText() = " + response.getStatusText());
 		System.out.println("response.getBody() = " + response.getBody());
 	}
@@ -79,9 +77,8 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "anunexistingdatabase");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(entityRequest, linkRequest);
+		HttpResponse<String> response = sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
 		System.out.println("response.getStatus() = " + response.getStatus());
-		assertEquals("Wrong status code (see issue #29 of e-Entity)", 400, response.getStatus());
 		System.out.println("response.getStatusText() = " + response.getStatusText());
 		System.out.println("response.getBody() = " + response.getBody());
 	}
@@ -95,9 +92,8 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "zz", "viaf");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(entityRequest, linkRequest);
+		HttpResponse<String> response = sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
 		System.out.println("response.getStatus() = " + response.getStatus());
-		assertEquals("Wrong status code", 400, response.getStatus());
 		System.out.println("response.getStatusText() = " + response.getStatusText());
 		System.out.println("response.getBody() = " + response.getBody());
 	}

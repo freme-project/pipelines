@@ -19,11 +19,13 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
+import eu.freme.conversion.rdf.RDFConstants;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gerald Haesendonck
@@ -72,5 +74,29 @@ public class PipelineService {
 				}
 				return response.getBody();
 		}
+	}
+
+	/**
+	 * Helper method that returns the content type of the response of the last request (or: the value of the 'accept'
+	 * header of the last request).
+	 * @param serializedRequests	The requests that (will) serve as input for the pipelining service.
+	 * @return						The content type of the response that the service will return.
+	 */
+	public static RDFConstants.RDFSerialization getContentTypeOfLastResponse(final List<SerializedRequest> serializedRequests) {
+		String contentType = "";
+		if (!serializedRequests.isEmpty()) {
+			SerializedRequest lastRequest = serializedRequests.get(serializedRequests.size() - 1);
+			Map<String, String> headers = lastRequest.getHeaders();
+			if (headers.containsKey("accept")) {
+				contentType = headers.get("accept");
+			} else {
+				Map<String, Object> parameters = lastRequest.getParameters();
+				if (parameters.containsKey("outformat")) {
+					contentType = parameters.get("outformat").toString();
+				}
+			}
+		}
+		RDFConstants.RDFSerialization serialization = RDFConstants.RDFSerialization.fromValue(contentType);
+		return serialization != null ? serialization : RDFConstants.RDFSerialization.TURTLE;
 	}
 }

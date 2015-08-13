@@ -141,8 +141,8 @@ public class RequestBuilder {
 	 */
 	public SerializedRequest build() {
 		String serviceEndpoint = baseEndpoint + service;
-		header("Content-Type", informat.contentType());
-		header("Accept", outformat.contentType());
+		header("content-type", informat.contentType());
+		header("accept", outformat.contentType());
 		parameter("prefix", prefix);
 		return new SerializedRequest(requestType, serviceEndpoint, parameters, headers, body);
 	}
