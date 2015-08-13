@@ -65,6 +65,11 @@ public abstract class LocalServerTestBase {
 				.body(new JsonNode(RequestFactory.toJson(serializedRequests)))
 				.asString();
 
+		// print some response info
+		System.out.println("response.getStatus() = " + response.getStatus());
+		System.out.println("response.getStatusText() = " + response.getStatusText());
+		System.out.println("response.getBody() = " + response.getBody());
+
 		RDFConstants.RDFSerialization responseContentType = RDFConstants.RDFSerialization.fromValue(response.getHeaders().getFirst("content-type"));
 		RDFConstants.RDFSerialization accept = PipelineService.getContentTypeOfLastResponse(serializedRequests);
 		assertEquals(expectedResponseCode, response.getStatus());

@@ -15,7 +15,6 @@
  */
 package eu.freme.eservices.pipelines;
 
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
@@ -44,10 +43,7 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
-		System.out.println("response.getStatus() = " + response.getStatus());
-		System.out.println("response.getStatusText() = " + response.getStatusText());
-		System.out.println("response.getBody() = " + response.getBody());
+		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
 	}
 
 	/**
@@ -61,10 +57,7 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "viaf");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
-		System.out.println("response.getStatus() = " + response.getStatus());
-		System.out.println("response.getStatusText() = " + response.getStatusText());
-		System.out.println("response.getBody() = " + response.getBody());
+		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
 	}
 
 	/**
@@ -77,10 +70,7 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "en", "anunexistingdatabase");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
-		System.out.println("response.getStatus() = " + response.getStatus());
-		System.out.println("response.getStatusText() = " + response.getStatusText());
-		System.out.println("response.getBody() = " + response.getBody());
+		sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
 	}
 
 	/**
@@ -92,9 +82,6 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "zz", "viaf");
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
-		HttpResponse<String> response = sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
-		System.out.println("response.getStatus() = " + response.getStatus());
-		System.out.println("response.getStatusText() = " + response.getStatusText());
-		System.out.println("response.getBody() = " + response.getBody());
+		sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
 	}
 }

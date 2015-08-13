@@ -15,7 +15,6 @@
  */
 package eu.freme.eservices.pipelines;
 
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
@@ -34,9 +33,6 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 		SerializedRequest translateRequest = RequestFactory.createTranslation("en", "fr");
 
-		HttpResponse<String> response = sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest, translateRequest);
-		System.out.println("response.getStatus() = " + response.getStatus());
-		System.out.println("response.getStatusText() = " + response.getStatusText());
-		System.out.println("response.getBody() = " + response.getBody());
+		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest, translateRequest);
 	}
 }
