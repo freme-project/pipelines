@@ -1,6 +1,7 @@
 package eu.freme.eservices.pipelines.api;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import eu.freme.conversion.rdf.RDFConstants;
 import eu.freme.eservices.pipelines.core.PipelineService;
 import eu.freme.eservices.pipelines.core.ServiceException;
 import eu.freme.eservices.pipelines.requests.RequestBuilder;
@@ -43,7 +44,7 @@ public class ServiceRestController {
 	@RequestMapping(value = "/pipelining/chain", method = RequestMethod.POST)
 	public ResponseEntity<String> pipeline(@RequestBody String requests) throws IOException, UnirestException {
 		MultiValueMap<String, String> headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_TYPE, "text/plain");
+		headers.add(HttpHeaders.CONTENT_TYPE, RDFConstants.RDFSerialization.TURTLE.contentType()); // TODO: look at output type of last request...
 		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 		try {
 			return new ResponseEntity<>(pipelineAPI.chain(serializedRequests), headers, HttpStatus.OK);
