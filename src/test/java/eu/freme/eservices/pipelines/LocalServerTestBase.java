@@ -62,6 +62,7 @@ public abstract class LocalServerTestBase {
 		List<SerializedRequest> serializedRequests = Arrays.asList(requests);
 
 		HttpResponse<String> response = Unirest.post("http://localhost:9000/pipelining/chain")
+				.header("content-type", RDFConstants.RDFSerialization.JSON.contentType())
 				.body(new JsonNode(RequestFactory.toJson(serializedRequests)))
 				.asString();
 
