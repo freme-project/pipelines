@@ -30,7 +30,16 @@ public class SerializedRequest {
 	private Map<String, String> headers;
 	private String body;	// only textual format for now...
 
-	public SerializedRequest(RequestType type, String endpoint, Map<String, Object> parameters, Map<String, String> headers, String body) {
+	/**
+	 * Creates a single request for usage in the pipelines service.
+	 * Use the {@link RequestFactory} or {@link RequestBuilder} to create requests.
+	 * @param type			The type of the request. Can be {@code GET} or {@code POST}.
+	 * @param endpoint	    The URI to send te request to. In other words, the service endpoint.
+	 * @param parameters	URL parameters to add to the request.
+	 * @param headers		HTTP headers to add to the request.
+	 * @param body			HTTP body to add to the request. Makes only sense when type is {@code POST}, but it's possible.
+	 */
+	SerializedRequest(RequestType type, String endpoint, Map<String, Object> parameters, Map<String, String> headers, String body) {
 		this.type = type;
 		this.endpoint = endpoint;
 		this.parameters = parameters;

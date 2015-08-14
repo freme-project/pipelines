@@ -39,6 +39,11 @@ public class RequestBuilder {
 	private final Map<String, Object> parameters;	// some extra app-specific parameters that will be added to the URI
 	private final Map<String, String> headers;		// some extra app-specific headers.
 
+	/**
+	 * Creates a RequestBuilder instance. Use one instance per request.
+	 * @param serviceURI	The path to the service, e.g. {@code /e-entity/dbpedia-spotlight/documents}.
+	 *                         The current URI's are stored in {@link ServiceConstants}
+	 */
 	public RequestBuilder(final String serviceURI) {
 		service = serviceURI;
 		parameters = new HashMap<>(4);
