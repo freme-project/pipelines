@@ -22,15 +22,11 @@ import eu.freme.eservices.pipelines.core.ServiceException;
 import eu.freme.eservices.pipelines.requests.RequestBuilder;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,11 +34,11 @@ import java.util.List;
 /**
  * @author Gerald Haesendonck
  */
-@RestController
+//@RestController
 @SuppressWarnings("unused")
 public class ServiceRestController {
 
-	@Autowired
+//	@Autowired
 	PipelineService pipelineAPI;
 
 	/**
@@ -56,11 +52,12 @@ public class ServiceRestController {
 	 * @throws IOException
 	 * @throws UnirestException
 	 */
+/*
 	@RequestMapping(value = "/pipelining/chain",
 			method = RequestMethod.POST,
 			consumes = "application/json",
 			produces = {"text/turtle", "application/json", "application/ld+json", "application/n-triples", "application/rdf+xml", "text/n3"}
-	)
+	)*/
 	public ResponseEntity<String> pipeline(@RequestBody String requests) throws IOException, UnirestException {
 		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 		try {
