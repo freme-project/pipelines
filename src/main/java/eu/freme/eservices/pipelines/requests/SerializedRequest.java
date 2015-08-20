@@ -15,6 +15,8 @@
  */
 package eu.freme.eservices.pipelines.requests;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +80,11 @@ public class SerializedRequest {
 		}
 		if (type == null) {
 			return "HTTP Method not supported. Only GET and POST are supported.";
+		}
+		try {
+			new URL(endpoint);
+		} catch (MalformedURLException e) {
+			return e.getMessage();
 		}
 		return "";
 	}
