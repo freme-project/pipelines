@@ -28,7 +28,7 @@ import static eu.freme.conversion.rdf.RDFConstants.RDFSerialization.TURTLE;
  * @author Gerald Haesendonck
  */
 public class RequestBuilder {
-	private RequestType requestType;
+	private HttpMethod httpMethod;
 	private String service;		// the URI to the specific service, e.g. /e-entity/dbpedia-spotlight/documents
 	private String baseEndpoint;
 	private RDFConstants.RDFSerialization informat;
@@ -50,7 +50,7 @@ public class RequestBuilder {
 		headers = new HashMap<>(2);
 
 		// the default values:
-		requestType = RequestType.POST;
+		httpMethod = HttpMethod.POST;
 		//baseEndpoint = "http://api.freme-project.eu/0.2";
 		baseEndpoint = "http://api.freme-project.eu/current";
 		informat = TURTLE;
@@ -58,12 +58,12 @@ public class RequestBuilder {
 	}
 
 	/**
-	 * Sets the request type.
-	 * @param type	The type of HTTP request. Currently only GET and POST are supported; the default is POST.
-	 * @return		A builder object with the request type set.
+	 * Sets the request method.
+	 * @param method	The method of HTTP request. Currently only GET and POST are supported; the default is POST.
+	 * @return		A builder object with the request method set.
 	 */
-	public RequestBuilder type(RequestType type) {
-		requestType = type;
+	public RequestBuilder method(HttpMethod method) {
+		httpMethod = method;
 		return this;
 	}
 
@@ -150,7 +150,7 @@ public class RequestBuilder {
 		if (prefix != null) {
 			parameter("prefix", prefix);
 		}
-		return new SerializedRequest(requestType, serviceEndpoint, parameters, headers, body);
+		return new SerializedRequest(httpMethod, serviceEndpoint, parameters, headers, body);
 	}
 
 }

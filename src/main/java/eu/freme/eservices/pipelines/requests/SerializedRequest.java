@@ -26,7 +26,7 @@ import java.util.Map;
  * @author Gerald Haesendonck
  */
 public class SerializedRequest {
-	private RequestType type;
+	private HttpMethod method;
 	private String endpoint;
 	private Map<String, Object> parameters;
 	private Map<String, String> headers;
@@ -35,14 +35,14 @@ public class SerializedRequest {
 	/**
 	 * Creates a single request for usage in the pipelines service.
 	 * Use the {@link RequestFactory} or {@link RequestBuilder} to create requests.
-	 * @param type			The type of the request. Can be {@code GET} or {@code POST}.
+	 * @param method			The method of the request. Can be {@code GET} or {@code POST}.
 	 * @param endpoint	    The URI to send te request to. In other words, the service endpoint.
 	 * @param parameters	URL parameters to add to the request.
 	 * @param headers		HTTP headers to add to the request.
-	 * @param body			HTTP body to add to the request. Makes only sense when type is {@code POST}, but it's possible.
+	 * @param body			HTTP body to add to the request. Makes only sense when method is {@code POST}, but it's possible.
 	 */
-	SerializedRequest(RequestType type, String endpoint, Map<String, Object> parameters, Map<String, String> headers, String body) {
-		this.type = type;
+	SerializedRequest(HttpMethod method, String endpoint, Map<String, Object> parameters, Map<String, String> headers, String body) {
+		this.method = method;
 		this.endpoint = endpoint;
 		this.parameters = parameters;
 		this.headers = new HashMap<>(headers.size(), 1);
@@ -54,8 +54,8 @@ public class SerializedRequest {
 		this.body = body;
 	}
 
-	public RequestType getType() {
-		return type;
+	public HttpMethod getMethod() {
+		return method;
 	}
 
 	public String getEndpoint() {
@@ -78,7 +78,7 @@ public class SerializedRequest {
 		if (endpoint == null) {
 			return "No endpoint given.";
 		}
-		if (type == null) {
+		if (method == null) {
 			return "HTTP Method not supported. Only GET and POST are supported.";
 		}
 		try {

@@ -35,14 +35,14 @@ public class TestRequestFactory {
 		String wrongRequest =
 				"[\n" +
 						"    {\n" +
-						"        \"type\": \"POS\",\n" +
+						"        \"method\": \"POS\",\n" +
 						"        \"endpoint\": \"http://api.freme-project.eu/current/e-entity/dbpedia-spotlight/documents\",\n" +
 						"        \"parameters\": {\n" +
 						"            \"language\": \"en\",\n" +
 						"            \"prefix\": \"http://freme-project.eu/\"\n" +
 						"        },\n" +
 						"        \"headers\": {\n" +
-						"            \"content-type\": \"text/plain\",\n" +
+						"            \"content-method\": \"text/plain\",\n" +
 						"            \"accept\": \"text/turtle\"\n" +
 						"        },\n" +
 						"        \"body\": \"This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.\"\n" +

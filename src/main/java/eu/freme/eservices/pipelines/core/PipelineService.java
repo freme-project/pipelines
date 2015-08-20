@@ -52,7 +52,7 @@ public class PipelineService {
 	}
 
 	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
-		switch (request.getType()) {
+		switch (request.getMethod()) {
 			case GET:
 				throw new UnsupportedOperationException("GET is not supported at this moment.");
 			default:

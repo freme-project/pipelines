@@ -18,6 +18,6 @@ package eu.freme.eservices.pipelines.requests;
 /**
  * @author Gerald Haesendonck
  */
-public enum RequestType {
+public enum HttpMethod {
 	GET, POST
 }
