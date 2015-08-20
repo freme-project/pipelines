@@ -15,7 +15,9 @@
  */
 package eu.freme.eservices.pipelines.api;
 
+import com.google.gson.JsonSyntaxException;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import eu.freme.conversion.rdf.RDFConstants;
 import eu.freme.eservices.pipelines.core.PipelineResponse;
 import eu.freme.eservices.pipelines.core.PipelineService;
 import eu.freme.eservices.pipelines.core.ServiceException;
@@ -62,8 +64,8 @@ public class ServiceRestController {
 			produces = {"text/turtle", "application/json", "application/ld+json", "application/n-triples", "application/rdf+xml", "text/n3"}
 	)
 	public ResponseEntity<String> pipeline(@RequestBody String requests) throws IOException, UnirestException {
-		List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 		try {
+			List<SerializedRequest> serializedRequests = RequestFactory.fromJson(requests);
 			PipelineResponse pipelineResult = pipelineAPI.chain(serializedRequests);
 			MultiValueMap<String, String> headers = new HttpHeaders();
 			headers.add(HttpHeaders.CONTENT_TYPE, pipelineResult.getContentType());
@@ -72,6 +74,10 @@ public class ServiceRestController {
 			MultiValueMap<String, String> headers = new HttpHeaders();
 			headers.add(HttpHeaders.CONTENT_TYPE, serviceError.getResponse().getContentType());
 			return new ResponseEntity<>(serviceError.getMessage(), headers, serviceError.getStatus());
+		} catch (JsonSyntaxException jsonError) {
+			MultiValueMap<String, String> headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_TYPE, RDFConstants.RDFSerialization.PLAINTEXT.contentType());
+			return new ResponseEntity<>("Invalid JSON in the body: " + jsonError.getCause().getMessage(), headers, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 }
