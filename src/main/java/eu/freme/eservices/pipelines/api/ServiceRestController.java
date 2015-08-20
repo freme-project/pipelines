@@ -79,6 +79,10 @@ public class ServiceRestController {
 			headers.add(HttpHeaders.CONTENT_TYPE, RDFConstants.RDFSerialization.PLAINTEXT.contentType());
 			String errormsg = jsonError.getCause() != null ? jsonError.getCause().getMessage() : jsonError.getMessage();
 			return new ResponseEntity<>("Invalid JSON in the body: " + errormsg, headers, HttpStatus.NOT_ACCEPTABLE);
+		} catch (UnirestException unirestEx) {
+			MultiValueMap<String, String> headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_TYPE, RDFConstants.RDFSerialization.PLAINTEXT.contentType());
+			return new ResponseEntity<>("Invalid JSON in the body: " + unirestEx.getMessage(), headers, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 }

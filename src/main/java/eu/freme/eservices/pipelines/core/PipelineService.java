@@ -38,8 +38,13 @@ public class PipelineService {
 	 */
 	public PipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
-		for (SerializedRequest serializedRequest : serializedRequests) {
-			lastResponse = execute(serializedRequest, lastResponse.getBody());
+		for (int reqNr = 0; reqNr < serializedRequests.size(); reqNr++) {
+			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
+			try {
+				lastResponse = execute(serializedRequest, lastResponse.getBody());
+			} catch (UnirestException e) {
+				throw new UnirestException("Request " + reqNr + ": " + e.getMessage());
+			}
 		}
 		return lastResponse;
 	}
