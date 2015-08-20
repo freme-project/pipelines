@@ -28,7 +28,7 @@ public class SerializedRequest {
 	private String endpoint;
 	private Map<String, Object> parameters;
 	private Map<String, String> headers;
-	private String body;	// only textual format for now...
+	private String body;
 
 	/**
 	 * Creates a single request for usage in the pipelines service.
@@ -70,5 +70,15 @@ public class SerializedRequest {
 
 	public String getBody() {
 		return body;
+	}
+
+	public String isValid() {
+		if (endpoint == null) {
+			return "No endpoint given.";
+		}
+		if (type == null) {
+			return "HTTP Method not supported. Only GET and POST are supported.";
+		}
+		return "";
 	}
 }

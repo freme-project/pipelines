@@ -16,6 +16,7 @@
 package eu.freme.eservices.pipelines.requests;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import eu.freme.conversion.rdf.RDFConstants;
 
 import java.util.Arrays;
@@ -132,9 +133,16 @@ public class RequestFactory {
 	 * Converts a JSON string to a list of requests.
 	 * @param serializedRequests	The JSON string of requests to convert.
 	 * @return						The list of requests represented by the JSON string.
+	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.
 	 */
 	public static List<SerializedRequest> fromJson(final String serializedRequests) {
 		SerializedRequest[] requests = gson.fromJson(serializedRequests, SerializedRequest[].class);
+		for (int reqNr = 0; reqNr < requests.length; reqNr++) {
+			String invalid = requests[reqNr].isValid();
+			if (!invalid.isEmpty()) {
+				throw new JsonSyntaxException("Request " + (reqNr + 1) + ": " + invalid);
+			}
+		}
 		return Arrays.asList(requests);
 	}
 }
