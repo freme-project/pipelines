@@ -17,10 +17,11 @@ package eu.freme.eservices.pipelines.requests;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.internal.LinkedTreeMap;
 import eu.freme.conversion.rdf.RDFConstants;
 
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * <p>Makes creating requests less painful. It returns default requests for services that can be modified afterwards.</p>
@@ -28,6 +29,14 @@ import java.util.List;
  */
 public class RequestFactory {
 	private final static Gson gson = new Gson();
+	private static Set<String> requestFieldNames = new HashSet<>(5, 1);
+
+	static {
+		Class<SerializedRequest> src = SerializedRequest.class;
+		for (Field field : src.getDeclaredFields()) {
+			requestFieldNames.add(field.getName());
+		}
+	}
 
 	/**
 	 * Creates a default request to the e-Entity Spotlight service.
@@ -136,6 +145,7 @@ public class RequestFactory {
 	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.
 	 */
 	public static List<SerializedRequest> fromJson(final String serializedRequests) {
+		checkOnMembers(serializedRequests);
 		SerializedRequest[] requests = gson.fromJson(serializedRequests, SerializedRequest[].class);
 		for (int reqNr = 0; reqNr < requests.length; reqNr++) {
 			String invalid = requests[reqNr].isValid();
@@ -144,5 +154,30 @@ public class RequestFactory {
 			}
 		}
 		return Arrays.asList(requests);
+	}
+
+	/**
+	 * Checks if all fields in the JSON string are valid field names of the {@link SerializedRequest} class. Throws an
+	 * exception if not valid.
+	 * @param serializedRequests	The JSON string to check; it should represent a list of {@link SerializedRequest} objects.
+	 * @throws JsonSyntaxException	A field is not recognized.
+	 */
+	private static void checkOnMembers(final String serializedRequests) {
+		Object serReqObj = gson.fromJson(serializedRequests, Object.class);
+		if (! (serReqObj instanceof ArrayList)) {
+			throw new JsonSyntaxException("Expected an array of requests");
+		}
+		ArrayList<LinkedTreeMap> requests = (ArrayList<LinkedTreeMap>)serReqObj;
+		for (int reqNr = 0; reqNr < requests.size(); reqNr++) {
+			LinkedTreeMap map = requests.get(reqNr);
+			for (Object o : map.keySet()) {
+				String fieldName = (String)o;
+				if (!requestFieldNames.contains(fieldName)) {
+					throw new JsonSyntaxException("Request " + (reqNr + 1) + ": field \"" + fieldName + "\" not known.");
+				}
+			}
+		}
+
+
 	}
 }
