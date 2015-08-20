@@ -44,6 +44,8 @@ public class PipelineService {
 				lastResponse = execute(serializedRequest, lastResponse.getBody());
 			} catch (UnirestException e) {
 				throw new UnirestException("Request " + reqNr + ": " + e.getMessage());
+			} catch (IOException e) {
+				throw new IOException("Request " + reqNr + ": " + e.getMessage());
 			}
 		}
 		return lastResponse;
