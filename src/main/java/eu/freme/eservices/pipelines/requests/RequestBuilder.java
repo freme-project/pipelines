@@ -55,7 +55,6 @@ public class RequestBuilder {
 		baseEndpoint = "http://api.freme-project.eu/current";
 		informat = TURTLE;
 		outformat = TURTLE;
-		prefix = "http://freme-project.eu/";
 	}
 
 	/**
@@ -148,7 +147,9 @@ public class RequestBuilder {
 		String serviceEndpoint = baseEndpoint + service;
 		header("content-type", informat.contentType());
 		header("accept", outformat.contentType());
-		parameter("prefix", prefix);
+		if (prefix != null) {
+			parameter("prefix", prefix);
+		}
 		return new SerializedRequest(requestType, serviceEndpoint, parameters, headers, body);
 	}
 
