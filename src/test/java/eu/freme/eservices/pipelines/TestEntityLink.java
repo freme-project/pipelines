@@ -15,11 +15,15 @@
  */
 package eu.freme.eservices.pipelines;
 
+import com.hp.hpl.jena.util.FileUtils;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.apache.http.HttpStatus;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * Some tests for the e-Entity, e-Link pipeline
@@ -77,5 +81,15 @@ public class TestEntityLink extends LocalServerTestBase {
 		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
 
 		sendRequest(HttpStatus.SC_BAD_REQUEST, entityRequest, linkRequest);
+	}
+
+	@Test
+	@Ignore // times out...
+	public void testLongArticle() throws IOException, UnirestException {
+		String data = FileUtils.readWholeFileAsUTF8("src/test/resources/testdocs/DuitslandGriekenland.txt");
+		SerializedRequest entityRequest = RequestFactory.createEntityFremeNER(data, "nl", "dbpedia");
+		SerializedRequest linkRequest = RequestFactory.createLink("3");	// Geo pos
+
+		sendRequest(HttpStatus.SC_OK, entityRequest, linkRequest);
 	}
 }
