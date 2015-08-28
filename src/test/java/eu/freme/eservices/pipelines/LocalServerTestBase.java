@@ -60,12 +60,12 @@ public abstract class LocalServerTestBase {
 	 */
 	protected HttpResponse<String> sendRequest(int expectedResponseCode, SerializedRequest... requests) throws UnirestException {
 		List<SerializedRequest> serializedRequests = Arrays.asList(requests);
-		String body = RequestFactory.toJson(serializedRequests);
+		String body = RequestFactory.toJson(requests);
 		System.out.println("request.body = " + body);
 
 		HttpResponse<String> response = Unirest.post("http://localhost:9000/pipelining/chain")
 				.header("content-type", RDFConstants.RDFSerialization.JSON.contentType())
-				.body(new JsonNode(RequestFactory.toJson(serializedRequests)))
+				.body(new JsonNode(body))
 				.asString();
 
 		// print some response info

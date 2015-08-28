@@ -130,6 +130,15 @@ public class RequestFactory {
 	}
 
 	/**
+	 * Converts requests to JSON in the given order.
+	 * @param requests The requests to convert to JSON.
+	 * @return		   A JSON string representing serialized requests, which can be sent to the Pipelines API.
+	 */
+	public static String toJson(final SerializedRequest... requests) {
+		return toJson(Arrays.asList(requests));
+	}
+
+	/**
 	 * Converts a list of requests to JSON.
 	 * @param requests	The list of requests to convert to JSON.
 	 * @return			A JSON string representing serialized requests, which can be sent to the Pipelines API.
