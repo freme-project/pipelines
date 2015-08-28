@@ -84,7 +84,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>eu.freme.eservices.epublishing.webservice.Main</mainClass>
+							<mainClass>eu.freme.eservices.pipelines.Run</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
