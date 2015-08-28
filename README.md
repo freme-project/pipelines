@@ -138,14 +138,14 @@ Usage:
 		// first, define the text to enrich and create an e-Entity request.
 		String text = "Ghent is one of the most beautiful cities in Belgium."
 		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_ENTITY_SPOTLIGHT.getUri());
-		return builder
+		SerializedRequest entityRequest = builder
 				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
 				.parameter("language", "en")
 				.body(text).build();
 		
 		// then, create an e-Link request, that uses template 3 (add geo coordinates)
 		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_LINK.getUri());
-		return builder
+		SerializedRequest linkRequest = builder
 				.parameter("templateid", "3")
 				.build();
 		
