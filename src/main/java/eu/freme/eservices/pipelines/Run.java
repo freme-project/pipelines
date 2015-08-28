@@ -43,7 +43,7 @@ public class Run {
 	}
 
 	public static void main(String[] args) {
-		logger.info("Starting e-Publishing service");
+		logger.info("Starting pipelining service");
 		Run run = new Run();
 		run.run();
 	}
