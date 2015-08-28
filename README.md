@@ -90,7 +90,7 @@ Send the request to the service:
 
 	curl -X POST --header "Content-Type: application/json" -d @example.json http://localhost:8080/pipelining/chain
 
-A test page for online testing with more examples can be found [here](http://api-dev.freme-project.eu/doc/#!/pipelining/post_pipelining_chain).
+A test page for online testing with more examples can be found [here](http://api.freme-project.eu/doc/0.3/pipelining/post_pipelining_chain).
 
 ### Creating request bodies
 
