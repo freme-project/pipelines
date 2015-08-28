@@ -45,7 +45,7 @@ From your favourite IDE:
 The Main class is `eu.freme.eservices.pipelines.Run`. No further arguments required.
 
 This starts a server listening on port 8080. You can send POST requests to
-<http://localhost:8080/pipelines>.
+<http://localhost:8080/pipelining/chain>.
 
 ## Sending requests
 
