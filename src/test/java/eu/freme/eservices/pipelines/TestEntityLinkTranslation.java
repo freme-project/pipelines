@@ -68,7 +68,6 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 	 * @throws UnirestException
 	 */
 	@Test
-	@Ignore
 	public void testWrongLanguagePair() throws UnirestException {
 		String data = "The Belfry in Ghent is one of the oldest buildings in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
