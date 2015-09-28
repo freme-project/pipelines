@@ -70,22 +70,19 @@ public class GsonTester {
 		ExecutorService executor = Executors.newFixedThreadPool(1000);
 
 		for (int i = 0; i < 1000000; i++) {
-			executor.submit(new Runnable() {
-				@Override
-				public void run() {
-					AClass aClass = new AClass();
-					int anInt = aClass.getAnInt();
-					String aString = aClass.getaString();
-					List<Integer> anIntList = aClass.getAnIntList();
+			executor.submit(() -> {
+				AClass aClass = new AClass();
+				int anInt = aClass.getAnInt();
+				String aString = aClass.getaString();
+				List<Integer> anIntList = aClass.getAnIntList();
 
-					// now serialize and deserialize
-					String json = gson.toJson(aClass);
-					AClass bClass = gson.fromJson(json, AClass.class);
+				// now serialize and deserialize
+				String json = gson.toJson(aClass);
+				AClass bClass = gson.fromJson(json, AClass.class);
 
-					assertEquals(anInt, bClass.getAnInt());
-					assertEquals(aString, bClass.getaString());
-					assertEquals(anIntList, bClass.getAnIntList());
-				}
+				assertEquals(anInt, bClass.getAnInt());
+				assertEquals(aString, bClass.getaString());
+				assertEquals(anIntList, bClass.getAnIntList());
 			});
 		}
 		executor.shutdown();
