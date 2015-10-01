@@ -160,7 +160,7 @@ Istituto Superiore Mario Boella, Tilde, Vistatec, WRIPL
 
 		<dependency>
 			<groupId>eu.freme</groupId>
-			<artifactId>conversion</artifactId>
+			<artifactId>common</artifactId>
 			<version>0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
