@@ -12,7 +12,7 @@ However, the instructions below allow it to run as a standalone service.
 ## Prerequisites
 You need
 
-* Java >= 7 (from release 0.4 on: >= 8)
+* Java >= 8
 * Maven 3
 * Git
 
