@@ -20,7 +20,7 @@ package eu.freme.eservices.pipelines;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFConstants;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 

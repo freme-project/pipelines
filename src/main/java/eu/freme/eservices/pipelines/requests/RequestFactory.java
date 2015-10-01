@@ -20,7 +20,7 @@ package eu.freme.eservices.pipelines.requests;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
-import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFConstants;
 
 import java.lang.reflect.Field;
 import java.util.*;

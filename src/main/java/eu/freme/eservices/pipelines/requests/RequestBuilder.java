@@ -17,12 +17,12 @@
  */
 package eu.freme.eservices.pipelines.requests;
 
-import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFConstants;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static eu.freme.conversion.rdf.RDFConstants.RDFSerialization.TURTLE;
+import static eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization.TURTLE;
 
 /**
  * <p>To ease the creation of a request.</p>

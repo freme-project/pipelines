@@ -21,7 +21,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
-import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFConstants;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.springframework.http.HttpStatus;
 

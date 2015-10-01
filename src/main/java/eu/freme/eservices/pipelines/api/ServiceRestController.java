@@ -19,7 +19,7 @@ package eu.freme.eservices.pipelines.api;
 
 import com.google.gson.JsonSyntaxException;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import eu.freme.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFConstants;
 import eu.freme.eservices.pipelines.core.PipelineResponse;
 import eu.freme.eservices.pipelines.core.PipelineService;
 import eu.freme.eservices.pipelines.core.ServiceException;
