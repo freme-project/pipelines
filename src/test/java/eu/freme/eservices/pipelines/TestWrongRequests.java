@@ -22,6 +22,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.common.conversion.rdf.RDFConstants;
 import org.apache.http.HttpStatus;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -36,6 +37,7 @@ public class TestWrongRequests extends LocalServerTestBase {
 	 * @throws UnirestException
 	 */
 	@Test
+	@Ignore
 	public void testNoBody() throws UnirestException {
 		HttpResponse<String> response = Unirest.post("http://localhost:9000/pipelining/chain")
 				.header("content-type", RDFConstants.RDFSerialization.JSON.contentType())

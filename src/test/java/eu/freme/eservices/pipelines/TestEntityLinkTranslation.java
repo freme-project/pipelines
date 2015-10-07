@@ -21,6 +21,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.apache.http.HttpStatus;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -36,6 +37,7 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 	 * @throws UnirestException
 	 */
 	@Test
+	@Ignore
 	public void testSomethingThatWorks() throws UnirestException {
 		String data = "The Belfry in Ghent is one of the oldest buildings in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
@@ -51,6 +53,7 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 	 * @throws UnirestException
 	 */
 	@Test
+	@Ignore
 	public void testALongerText() throws UnirestException {
 		String input = "With just 200,000 residents, Reykjavík ranks as one of Europe’s smallest capital cities. But when Iceland’s total population only hovers around 300,000, it makes sense that the capital is known as the “big city” and offers all the cultural perks of a much larger place.\n" +
 				"\n" +
@@ -67,6 +70,7 @@ public class TestEntityLinkTranslation extends LocalServerTestBase {
 	 * @throws UnirestException
 	 */
 	@Test
+	@Ignore
 	public void testWrongLanguagePair() throws UnirestException {
 		String data = "The Belfry in Ghent is one of the oldest buildings in Belgium.";
 		SerializedRequest entityRequest = RequestFactory.createEntitySpotlight(data, "en");
