@@ -18,9 +18,11 @@
 package eu.freme.eservices.pipelines.requests;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import eu.freme.common.conversion.rdf.RDFConstants;
+import eu.freme.eservices.pipelines.serialization.Pipeline;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -31,6 +33,7 @@ import java.util.*;
  */
 public class RequestFactory {
 	private final static Gson gson = new Gson();
+	private final static Gson gson_pretty = new GsonBuilder().setPrettyPrinting().create();
 	private static Set<String> requestFieldNames = new HashSet<>(5, 1);
 
 	static {
@@ -165,6 +168,23 @@ public class RequestFactory {
 			}
 		}
 		return Arrays.asList(requests);
+	}
+
+	/**
+	 * Converts a pipeline template to a JSON string.
+	 * @param pipeline	The pipeline template to convert.
+	 * @return			A JSON string representing the pipeline template. This is id, if it is persistent, the owner name,
+	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests.
+	 */
+	public static String toJson(final eu.freme.common.persistence.model.Pipeline pipeline) {
+		List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
+		Pipeline pipelineObj = new Pipeline(
+				pipeline.getId(),
+				pipeline.isPersistent(),
+				pipeline.getOwner().getName(),
+				pipeline.getVisibility().name(),
+				serializedRequests);
+		return gson_pretty.toJson(pipelineObj);
 	}
 
 	/**

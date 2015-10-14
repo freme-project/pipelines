@@ -68,7 +68,7 @@ public class PipelineService {
 
 				HttpResponse<String> response;
 				if (body != null) {
-					 response = req.body(body).asString();
+					response = req.body(body).asString();
 				} else {
 					response = req.asString();
 				}
