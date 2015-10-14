@@ -188,7 +188,7 @@ public class RequestFactory {
 	 * Converts a pipeline template to a JSON string.
 	 * @param pipeline	The pipeline template to convert.
 	 * @return			A JSON string representing the pipeline template. This is id, if it is persistent, the owner name,
-	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests
+	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests.
 	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
 	 */
 	public static String toJson(final eu.freme.common.persistence.model.Pipeline pipeline) {
@@ -209,6 +209,28 @@ public class RequestFactory {
 	 */
 	public static Pipeline templateFromJson(final String pipelineTemplate) {
 		return gson.fromJson(pipelineTemplate, Pipeline.class);
+	}
+
+	/**
+	 * Converts a list of pipeline templates to a JSON string.
+	 * @param pipelines	The pipeline templates to convert.
+	 * @return			A JSON string representing the pipeline templates. This is id, if it is persistent, the owner name,
+	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests per pipeline.
+	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
+	 */
+	public static String templatesToJson(final List<eu.freme.common.persistence.model.Pipeline> pipelines) {
+		List<Pipeline> pipelineInfos = new ArrayList<>();
+		for (eu.freme.common.persistence.model.Pipeline pipeline : pipelines) {
+			List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
+			Pipeline pipelineObj = new Pipeline(
+					pipeline.getId(),
+					pipeline.isPersistent(),
+					pipeline.getOwner().getName(),
+					pipeline.getVisibility().name(),
+					serializedRequests);
+			pipelineInfos.add(pipelineObj);
+		}
+		return gson_pretty.toJson(pipelineInfos);
 	}
 
 	/**
