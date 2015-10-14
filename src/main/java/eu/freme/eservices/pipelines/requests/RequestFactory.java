@@ -188,7 +188,8 @@ public class RequestFactory {
 	 * Converts a pipeline template to a JSON string.
 	 * @param pipeline	The pipeline template to convert.
 	 * @return			A JSON string representing the pipeline template. This is id, if it is persistent, the owner name,
-	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests.
+	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests
+	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
 	 */
 	public static String toJson(final eu.freme.common.persistence.model.Pipeline pipeline) {
 		List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
