@@ -90,4 +90,29 @@ public class SerializedRequest {
 		}
 		return "";
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		SerializedRequest request = (SerializedRequest) o;
+
+		if (method != request.method) return false;
+		if (!endpoint.equals(request.endpoint)) return false;
+		if (parameters != null ? !parameters.equals(request.parameters) : request.parameters != null) return false;
+		if (headers != null ? !headers.equals(request.headers) : request.headers != null) return false;
+		return !(body != null ? !body.equals(request.body) : request.body != null);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = method.hashCode();
+		result = 31 * result + endpoint.hashCode();
+		result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+		result = 31 * result + (headers != null ? headers.hashCode() : 0);
+		result = 31 * result + (body != null ? body.hashCode() : 0);
+		return result;
+	}
 }
