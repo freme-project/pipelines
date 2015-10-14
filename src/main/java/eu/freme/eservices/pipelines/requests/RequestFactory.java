@@ -234,6 +234,16 @@ public class RequestFactory {
 	}
 
 	/**
+	 * Converts a JSON string into an object containing pipeline templates information.
+	 * @param pipelineTemplates 	A JSON string representing the pipeline templates.
+	 * @return  			    	The pipeline template info objects.
+	 */
+	public static List<Pipeline> templatesFromJson(final String pipelineTemplates) {
+		Pipeline[] requests = gson.fromJson(pipelineTemplates, Pipeline[].class);
+		return Arrays.asList(requests);
+	}
+
+	/**
 	 * Checks if all fields in the JSON string are valid field names of the {@link SerializedRequest} class. Throws an
 	 * exception if not valid.
 	 * @param serializedRequests	The JSON string to check; it should represent a list of {@link SerializedRequest} objects.
