@@ -60,4 +60,8 @@ public class Pipeline {
 	public List<SerializedRequest> getSerializedRequests() {
 		return serializedRequests;
 	}
+
+	public void setSerializedRequests(List<SerializedRequest> serializedRequests) {
+		this.serializedRequests = serializedRequests;
+	}
 }
