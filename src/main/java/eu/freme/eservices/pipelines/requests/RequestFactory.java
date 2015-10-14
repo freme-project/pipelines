@@ -58,6 +58,20 @@ public class RequestFactory {
 	}
 
 	/**
+	 * Creates a default request to the e-Entity Spotlight service without input. This is used when the input is the output of
+	 * another request.
+	 * @param language	The language the text is in.
+	 * @return			A request for e-Entity Spotlight.
+	 */
+	public static SerializedRequest createEntitySpotlight(final String language) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_ENTITY_SPOTLIGHT.getUri());
+		return builder
+				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
+				.parameter("language", language)
+				.build();
+	}
+
+	/**
 	 * Creates a default request to the e-Entity FREME NER service.
 	 * @param text		The text to enrich (plain text).
 	 * @param language  The language the text is in.
