@@ -40,4 +40,24 @@ public class Pipeline {
 		this.visibility = visibility;
 		this.serializedRequests = serializedRequests;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public boolean isPersist() {
+		return persist;
+	}
+
+	public String getVisibility() {
+		return visibility;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public List<SerializedRequest> getSerializedRequests() {
+		return serializedRequests;
+	}
 }
