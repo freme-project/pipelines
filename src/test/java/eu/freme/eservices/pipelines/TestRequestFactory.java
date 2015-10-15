@@ -18,8 +18,8 @@
 package eu.freme.eservices.pipelines;
 
 import com.google.gson.JsonSyntaxException;
-import eu.freme.eservices.pipelines.requests.RequestFactory;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
+import eu.freme.eservices.pipelines.serialization.Serializer;
 import org.junit.Test;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class TestRequestFactory {
 						"        \"body\": \"This summer there is the Zomerbar in Antwerp, one of the most beautiful cities in Belgium.\"\n" +
 						"    }]";
 		try {
-			List<SerializedRequest> requests = RequestFactory.fromJson(wrongRequest);
+			List<SerializedRequest> requests = Serializer.fromJson(wrongRequest);
 			fail("A JsonSyntaxException is expected, but all went well (which is wrong!)"); // should throw exception
 		} catch (JsonSyntaxException e) {
 			// very good!
