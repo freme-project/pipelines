@@ -17,10 +17,6 @@
  */
 package eu.freme.eservices.pipelines.serialization;
 
-import eu.freme.eservices.pipelines.requests.SerializedRequest;
-
-import java.util.List;
-
 /**
  * <p>An object representing a pipeline template</p>
  *
@@ -33,7 +29,11 @@ public class Pipeline {
 	private boolean persist;
 	private String visibility;
 	private String owner;
-	private List<SerializedRequest> serializedRequests;
+	private String serializedRequests;
+
+	public Pipeline(final String label, final String description, final String serializedRequests) {
+		this(-1, label, description, false, null, null, serializedRequests);
+	}
 
 	public Pipeline(long id,
 					final String label,
@@ -41,7 +41,7 @@ public class Pipeline {
 					boolean persist,
 					final String owner,
 					final String visibility,
-					final List<SerializedRequest> serializedRequests) {
+					final String serializedRequests) {
 		this.id = id;
 		this.label = label;
 		this.description = description;
@@ -75,11 +75,53 @@ public class Pipeline {
 		return owner;
 	}
 
-	public List<SerializedRequest> getSerializedRequests() {
+	public String getSerializedRequests() {
 		return serializedRequests;
 	}
 
-	public void setSerializedRequests(List<SerializedRequest> serializedRequests) {
+	public void setSerializedRequests(String serializedRequests) {
 		this.serializedRequests = serializedRequests;
+	}
+
+	public String isValid() {
+		if (label == null) {
+			return "No label given.";
+		}
+		if (description == null) {
+			return "No description given.";
+		}
+		if (serializedRequests == null) {
+			return "No requests given.";
+		}
+		return "";
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Pipeline pipeline = (Pipeline) o;
+
+		if (id != pipeline.id) return false;
+		if (persist != pipeline.persist) return false;
+		if (!label.equals(pipeline.label)) return false;
+		if (!description.equals(pipeline.description)) return false;
+		if (visibility != null ? !visibility.equals(pipeline.visibility) : pipeline.visibility != null) return false;
+		if (owner != null ? !owner.equals(pipeline.owner) : pipeline.owner != null) return false;
+		return serializedRequests.equals(pipeline.serializedRequests);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = (int) (id ^ (id >>> 32));
+		result = 31 * result + label.hashCode();
+		result = 31 * result + description.hashCode();
+		result = 31 * result + (persist ? 1 : 0);
+		result = 31 * result + (visibility != null ? visibility.hashCode() : 0);
+		result = 31 * result + (owner != null ? owner.hashCode() : 0);
+		result = 31 * result + serializedRequests.hashCode();
+		return result;
 	}
 }

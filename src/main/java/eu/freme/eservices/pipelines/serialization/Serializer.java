@@ -41,6 +41,14 @@ public class Serializer {
 		}
 	}
 
+	private static Set<String> pipelineFieldNames = new HashSet<>(7, 1);
+	static {
+		Class<Pipeline> pc = Pipeline.class;
+		for (Field field : pc.getDeclaredFields()) {
+			pipelineFieldNames.add(field.getName());
+		}
+	}
+
 	/**
 	 * Converts requests to JSON in the given order.
 	 * @param requests The requests to convert to JSON.
@@ -68,7 +76,7 @@ public class Serializer {
 	 */
 	@SuppressWarnings("unused")
 	public static List<SerializedRequest> fromJson(final String serializedRequests) {
-		checkOnMembers(serializedRequests);
+		checkOnRequestsMembers(serializedRequests);
 		SerializedRequest[] requests = gson.fromJson(serializedRequests, SerializedRequest[].class);
 		for (int reqNr = 0; reqNr < requests.length; reqNr++) {
 			String invalid = requests[reqNr].isValid();
@@ -86,9 +94,19 @@ public class Serializer {
 	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests.
 	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
 	 */
+	public static String toJson(final Pipeline pipeline) {
+		return gson.toJson(pipeline);
+	}
+
+	/**
+	 * Converts a pipeline template resource to a JSON string.
+	 * @param pipeline	The pipeline template resource to convert.
+	 * @return			A JSON string representing the pipeline template. This is id, if it is persistent, the owner name,
+	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests.
+	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
+	 */
 	@SuppressWarnings("unused")
 	public static String toJson(final eu.freme.common.persistence.model.Pipeline pipeline) {
-		List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 		Pipeline pipelineObj = new Pipeline(
 				pipeline.getId(),
 				pipeline.getLabel(),
@@ -96,7 +114,7 @@ public class Serializer {
 				pipeline.isPersistent(),
 				pipeline.getOwner().getName(),
 				pipeline.getVisibility().name(),
-				serializedRequests);
+				pipeline.getSerializedRequests());
 		return gson_pretty.toJson(pipelineObj);
 	}
 
@@ -104,9 +122,18 @@ public class Serializer {
 	 * Converts a JSON string into an object containing pipeline template information.
 	 * @param pipelineTemplate 	A JSON string representing the pipeline template.
 	 * @return  			    The pipeline template info object.
+	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
 	 */
 	@SuppressWarnings("unused")
 	public static Pipeline templateFromJson(final String pipelineTemplate) {
+		checkOnPipelineMembers(pipelineTemplate);
+		Pipeline pipeline = gson.fromJson(pipelineTemplate, Pipeline.class);
+		checkOnRequestsMembers(pipeline.getSerializedRequests());
+		String invalid = pipeline.isValid();
+		if (!invalid.isEmpty()) {
+			throw new JsonSyntaxException(invalid);
+		}
+		List<SerializedRequest> requests = fromJson(pipeline.getSerializedRequests());	// to validate serialized requests
 		return gson.fromJson(pipelineTemplate, Pipeline.class);
 	}
 
@@ -121,7 +148,6 @@ public class Serializer {
 	public static String templatesToJson(final List<eu.freme.common.persistence.model.Pipeline> pipelines) {
 		List<Pipeline> pipelineInfos = new ArrayList<>();
 		for (eu.freme.common.persistence.model.Pipeline pipeline : pipelines) {
-			List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 			Pipeline pipelineObj = new Pipeline(
 					pipeline.getId(),
 					pipeline.getLabel(),
@@ -129,7 +155,7 @@ public class Serializer {
 					pipeline.isPersistent(),
 					pipeline.getOwner().getName(),
 					pipeline.getVisibility().name(),
-					serializedRequests);
+					pipeline.getSerializedRequests());
 			pipelineInfos.add(pipelineObj);
 		}
 		return gson_pretty.toJson(pipelineInfos);
@@ -152,7 +178,7 @@ public class Serializer {
 	 * @param serializedRequests	The JSON string to check; it should represent a list of {@link SerializedRequest} objects.
 	 * @throws JsonSyntaxException	A field is not recognized.
 	 */
-	private static void checkOnMembers(final String serializedRequests) {
+	private static void checkOnRequestsMembers(final String serializedRequests) {
 		Object serReqObj = gson.fromJson(serializedRequests, Object.class);
 		if (! (serReqObj instanceof ArrayList)) {
 			throw new JsonSyntaxException("Expected an array of requests");
@@ -163,11 +189,18 @@ public class Serializer {
 			for (Object o : map.keySet()) {
 				String fieldName = (String)o;
 				if (!requestFieldNames.contains(fieldName)) {
-					throw new JsonSyntaxException("Request " + (reqNr + 1) + ": field \"" + fieldName + "\" not known.");
+					throw new JsonSyntaxException("request " + (reqNr + 1) + ": field \"" + fieldName + "\" not known.");
 				}
 			}
 		}
+	}
 
-
+	private static void checkOnPipelineMembers(final String pipeline) {
+		LinkedTreeMap<String, String> pipelineObject = (LinkedTreeMap<String, String>)gson.fromJson(pipeline, Object.class);
+		for (String fieldName : pipelineObject.keySet()) {
+			if (!pipelineFieldNames.contains(fieldName)) {
+				throw new JsonSyntaxException("field \"" + fieldName + "\" not known.");
+			}
+		}
 	}
 }
