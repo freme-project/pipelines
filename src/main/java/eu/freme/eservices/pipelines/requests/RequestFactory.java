@@ -195,6 +195,8 @@ public class RequestFactory {
 		List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 		Pipeline pipelineObj = new Pipeline(
 				pipeline.getId(),
+				pipeline.getLabel(),
+				pipeline.getDescription(),
 				pipeline.isPersistent(),
 				pipeline.getOwner().getName(),
 				pipeline.getVisibility().name(),
@@ -224,6 +226,8 @@ public class RequestFactory {
 			List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 			Pipeline pipelineObj = new Pipeline(
 					pipeline.getId(),
+					pipeline.getLabel(),
+					pipeline.getDescription(),
 					pipeline.isPersistent(),
 					pipeline.getOwner().getName(),
 					pipeline.getVisibility().name(),

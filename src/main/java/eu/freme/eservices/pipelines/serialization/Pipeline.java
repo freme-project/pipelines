@@ -28,13 +28,23 @@ import java.util.List;
  */
 public class Pipeline {
 	private long id;
+	private String label;
+	private String description;
 	private boolean persist;
 	private String visibility;
 	private String owner;
 	private List<SerializedRequest> serializedRequests;
 
-	public Pipeline(long id, boolean persist, String owner, String visibility, List<SerializedRequest> serializedRequests) {
+	public Pipeline(long id,
+					final String label,
+					final String description,
+					boolean persist,
+					final String owner,
+					final String visibility,
+					final List<SerializedRequest> serializedRequests) {
 		this.id = id;
+		this.label = label;
+		this.description = description;
 		this.persist = persist;
 		this.owner = owner;
 		this.visibility = visibility;
@@ -43,6 +53,14 @@ public class Pipeline {
 
 	public long getId() {
 		return id;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public boolean isPersist() {
