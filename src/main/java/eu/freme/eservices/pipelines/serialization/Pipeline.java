@@ -31,6 +31,7 @@ public class Pipeline {
 	private String owner;
 	private String serializedRequests;
 
+	@SuppressWarnings("unused")
 	public Pipeline(final String label, final String description, final String serializedRequests) {
 		this(-1, label, description, false, null, null, serializedRequests);
 	}
@@ -51,38 +52,47 @@ public class Pipeline {
 		this.serializedRequests = serializedRequests;
 	}
 
+	@SuppressWarnings("unused")
 	public long getId() {
 		return id;
 	}
 
+	@SuppressWarnings("unused")
 	public String getLabel() {
 		return label;
 	}
 
+	@SuppressWarnings("unused")
 	public String getDescription() {
 		return description;
 	}
 
+	@SuppressWarnings("unused")
 	public boolean isPersist() {
 		return persist;
 	}
 
+	@SuppressWarnings("unused")
 	public String getVisibility() {
 		return visibility;
 	}
 
+	@SuppressWarnings("unused")
 	public String getOwner() {
 		return owner;
 	}
 
+	@SuppressWarnings("unused")
 	public String getSerializedRequests() {
 		return serializedRequests;
 	}
 
+	@SuppressWarnings("unused")
 	public void setSerializedRequests(String serializedRequests) {
 		this.serializedRequests = serializedRequests;
 	}
 
+	@SuppressWarnings("unused")
 	public String isValid() {
 		if (label == null) {
 			return "No label given.";
