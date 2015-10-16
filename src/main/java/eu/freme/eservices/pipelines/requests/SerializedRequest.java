@@ -76,6 +76,10 @@ public class SerializedRequest {
 		return body;
 	}
 
+	public void setBody(String body) {
+		this.body = body;
+	}
+
 	public String isValid() {
 		if (endpoint == null) {
 			return "No endpoint given.";
