@@ -93,6 +93,31 @@ public class Pipeline {
 	}
 
 	@SuppressWarnings("unused")
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	@SuppressWarnings("unused")
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@SuppressWarnings("unused")
+	public void setPersist(boolean persist) {
+		this.persist = persist;
+	}
+
+	@SuppressWarnings("unused")
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
+	}
+
+	@SuppressWarnings("unused")
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	@SuppressWarnings("unused")
 	public String isValid() {
 		if (label == null) {
 			return "No label given.";
