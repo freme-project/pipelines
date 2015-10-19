@@ -42,7 +42,7 @@ public class RequestFactory {
 
 	/**
 	 * Creates a default request to the e-Entity Spotlight service without input. This is used when the input is the output of
-	 * another request.
+	 * another request or for templates.
 	 * @param language	The language the text is in.
 	 * @return			A request for e-Entity Spotlight.
 	 */
@@ -56,7 +56,8 @@ public class RequestFactory {
 	}
 
 	/**
-	 * Creates a default request to the e-Entity FREME NER service.
+	 * Creates a default request to the e-Entity FREME NER service. This is used when the input is the output of
+	 * another request or for templates.
 	 * @param text		The text to enrich (plain text).
 	 * @param language  The language the text is in.
 	 * @param dataSet   The data set to use for enrichment.
@@ -74,8 +75,25 @@ public class RequestFactory {
 	}
 
 	/**
+	 * Creates a default request to the e-Entity FREME NER service without input. This is used when the input is the output of
+	 * another request or for templates.
+	 * @param language  The language the text is in.
+	 * @param dataSet   The data set to use for enrichment.
+	 * @return        	A request for e-Entity FREME NER.
+	 */
+	@SuppressWarnings("unused")
+	public static SerializedRequest createEntityFremeNER(final String language, final String dataSet) {
+		RequestBuilder builder = new RequestBuilder(ServiceConstants.E_ENTITY_FREME_NER.getUri());
+		return builder
+				.informat(RDFConstants.RDFSerialization.PLAINTEXT)
+				.parameter("language", language)
+				.parameter("dataset", dataSet)
+				.build();
+	}
+
+	/**
 	 * Creates a default request to the e-Link service without input. This is used when the input is the output of
-	 * another request.
+	 * another request or for templates.
 	 * @param templateID	The template ID to use for linking.
 	 * @return				A request for e-Link.
 	 */
@@ -107,7 +125,7 @@ public class RequestFactory {
 
 	/**
 	 * Creates a default request to the e-Translate service without input. This is used when the input is the output of
-	 * another request.
+	 * another request or for templates.
 	 * @param sourceLang 	The source language.
 	 * @param targetLang	The target language.
 	 * @return				A request for e-Translate.
@@ -123,7 +141,7 @@ public class RequestFactory {
 
 	/**
 	 * Creates a default request to the e-Terminology service without input. This is used when the input is the output of
-	 * another request.
+	 * another request or for templates.
 	 * @param sourceLang 	The source language.
 	 * @param targetLang	The target language.
 	 * @return				A request for e-Translate.
