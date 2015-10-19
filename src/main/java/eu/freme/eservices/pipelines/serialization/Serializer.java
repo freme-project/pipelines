@@ -107,6 +107,7 @@ public class Serializer {
 	 */
 	@SuppressWarnings("unused")
 	public static String toJson(final eu.freme.common.persistence.model.Pipeline pipeline) {
+		List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 		Pipeline pipelineObj = new Pipeline(
 				pipeline.getId(),
 				pipeline.getLabel(),
@@ -114,7 +115,7 @@ public class Serializer {
 				pipeline.isPersistent(),
 				pipeline.getOwner().getName(),
 				pipeline.getVisibility().name(),
-				pipeline.getSerializedRequests());
+				serializedRequests);
 		return gson_pretty.toJson(pipelineObj);
 	}
 
@@ -128,12 +129,11 @@ public class Serializer {
 	public static Pipeline templateFromJson(final String pipelineTemplate) {
 		checkOnPipelineMembers(pipelineTemplate);
 		Pipeline pipeline = gson.fromJson(pipelineTemplate, Pipeline.class);
-		checkOnRequestsMembers(pipeline.getSerializedRequests());
+		checkOnRequestsMembers(toJson(pipeline.getSerializedRequests()));
 		String invalid = pipeline.isValid();
 		if (!invalid.isEmpty()) {
 			throw new JsonSyntaxException(invalid);
 		}
-		List<SerializedRequest> requests = fromJson(pipeline.getSerializedRequests());	// to validate serialized requests
 		return gson.fromJson(pipelineTemplate, Pipeline.class);
 	}
 
@@ -148,6 +148,7 @@ public class Serializer {
 	public static String templatesToJson(final List<eu.freme.common.persistence.model.Pipeline> pipelines) {
 		List<Pipeline> pipelineInfos = new ArrayList<>();
 		for (eu.freme.common.persistence.model.Pipeline pipeline : pipelines) {
+			List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 			Pipeline pipelineObj = new Pipeline(
 					pipeline.getId(),
 					pipeline.getLabel(),
@@ -155,7 +156,7 @@ public class Serializer {
 					pipeline.isPersistent(),
 					pipeline.getOwner().getName(),
 					pipeline.getVisibility().name(),
-					pipeline.getSerializedRequests());
+					serializedRequests);
 			pipelineInfos.add(pipelineObj);
 		}
 		return gson_pretty.toJson(pipelineInfos);

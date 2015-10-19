@@ -17,6 +17,10 @@
  */
 package eu.freme.eservices.pipelines.serialization;
 
+import eu.freme.eservices.pipelines.requests.SerializedRequest;
+
+import java.util.List;
+
 /**
  * <p>An object representing a pipeline template</p>
  *
@@ -29,10 +33,10 @@ public class Pipeline {
 	private boolean persist;
 	private String visibility;
 	private String owner;
-	private String serializedRequests;
+	private List<SerializedRequest> serializedRequests;
 
 	@SuppressWarnings("unused")
-	public Pipeline(final String label, final String description, final String serializedRequests) {
+	public Pipeline(final String label, final String description, final List<SerializedRequest> serializedRequests) {
 		this(-1, label, description, false, null, null, serializedRequests);
 	}
 
@@ -42,7 +46,7 @@ public class Pipeline {
 					boolean persist,
 					final String owner,
 					final String visibility,
-					final String serializedRequests) {
+					final List<SerializedRequest> serializedRequests) {
 		this.id = id;
 		this.label = label;
 		this.description = description;
@@ -83,12 +87,12 @@ public class Pipeline {
 	}
 
 	@SuppressWarnings("unused")
-	public String getSerializedRequests() {
+	public List<SerializedRequest> getSerializedRequests() {
 		return serializedRequests;
 	}
 
 	@SuppressWarnings("unused")
-	public void setSerializedRequests(String serializedRequests) {
+	public void setSerializedRequests(List<SerializedRequest> serializedRequests) {
 		this.serializedRequests = serializedRequests;
 	}
 

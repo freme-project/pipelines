@@ -25,6 +25,7 @@ import eu.freme.eservices.pipelines.serialization.Pipeline;
 import eu.freme.eservices.pipelines.serialization.Serializer;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -65,7 +66,7 @@ public class TestRequestFactory {
 	@Test
 	public void testPipelineMemberCheckValid() {
 		Gson gson = new Gson();
-		String serializedReqs = Serializer.toJson(RequestFactory.createEntitySpotlight("nl"));
+		List<SerializedRequest> serializedReqs = Collections.singletonList(RequestFactory.createEntitySpotlight("nl"));
 		Pipeline pipeline = new Pipeline(1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", serializedReqs);
 		String pipelineStr = gson.toJson(pipeline);
 		Pipeline pipeline2 = Serializer.templateFromJson(pipelineStr);
@@ -75,7 +76,7 @@ public class TestRequestFactory {
 	@Test
 	public void testPipelineMemberCheckValidInvalid() {
 		Gson gson = new Gson();
-		String serializedReqs = Serializer.toJson(RequestFactory.createEntitySpotlight("nl"));
+		List<SerializedRequest> serializedReqs = Collections.singletonList(RequestFactory.createEntitySpotlight("nl"));
 		Pipeline pipeline = new Pipeline(1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", serializedReqs);
 		String pipelineStr = gson.toJson(pipeline);
 		String invalidPipelineStr = pipelineStr.replace("label", "labour");
@@ -88,19 +89,20 @@ public class TestRequestFactory {
 		}
 	}
 
-	@Test
-	public void testPipelineMemberCheckValidInvalidRequest() {
-		Gson gson = new Gson();
-		String serializedReqs = Serializer.toJson(RequestFactory.createEntitySpotlight("nl"));
-		String invalidSerializedReqs = serializedReqs.replace("parameters", "barometers");
-		Pipeline pipeline = new Pipeline(1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", invalidSerializedReqs);
-		String pipelineStr = gson.toJson(pipeline);
-		try {
-			Serializer.templateFromJson(pipelineStr);
-			fail("A JsonSyntaxException is expected, but all went well (which is wrong!)");
-		} catch (JsonSyntaxException e) {
-			// very good!
-			System.out.println("Test succeeded. Error msg: " + e.getMessage());
-		}
-	}
+//	@Test
+//	TODO: not valid anymore. Write new test.
+//	public void testPipelineMemberCheckValidInvalidRequest() {
+//		Gson gson = new Gson();
+//		String serializedReqs = Serializer.toJson(RequestFactory.createEntitySpotlight("nl"));
+//		String invalidSerializedReqs = serializedReqs.replace("parameters", "barometers");
+//		Pipeline pipeline = new Pipeline(1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", invalidSerializedReqs);
+//		String pipelineStr = gson.toJson(pipeline);
+//		try {
+//			Serializer.templateFromJson(pipelineStr);
+//			fail("A JsonSyntaxException is expected, but all went well (which is wrong!)");
+//		} catch (JsonSyntaxException e) {
+//			// very good!
+//			System.out.println("Test succeeded. Error msg: " + e.getMessage());
+//		}
+//	}
 }
