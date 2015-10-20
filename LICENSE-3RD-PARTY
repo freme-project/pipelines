@@ -8,22 +8,18 @@
                         http://www.apache.org/licenses/
 
 applies to:
-	- Apache Maven Plugins - maven-assembly-plugin:2.5, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-clean-plugin:2.4.1, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-compiler-plugin:3.1, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-deploy-plugin:2.7, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-install-plugin:2.3.1, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-jar-plugin:2.3.2, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-resources-plugin:2.5, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-site-plugin:3.0, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-surefire-plugin:2.10, Copyright 2002–2015 The Apache Software Foundation. All rights reserved.
-	- Freme - conversion:0.3
-	- Google Gson - gson:2.3.1, Copyright 2015 The Apache Software Foundation. All Rights Reserved.
-	- License Plugin - license-maven-plugin:2.3, Copyright 2008 Mycila (mathieu.carbou@gmail.com)
-	- Spring Boot - spring-boot-maven-plugin:1.2.5.RELEASE
-	- Spring Boot - spring-boot-starter-log4j:1.2.5.RELEASE
-	- Spring Boot - spring-boot-starter-web:1.2.5.RELEASE
-	- Spring Boot - spring-boot-starter:1.2.5.RELEASE
+	- Apache Maven Plugins - maven-assembly-plugin:2.5.1, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Apache Maven Plugins - maven-clean-plugin:2.5, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Apache Maven Plugins - maven-compiler-plugin:3.1, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Apache Maven Plugins - maven-deploy-plugin:2.7, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Apache Maven Plugins - maven-install-plugin:2.4
+	- Apache Maven Plugins - maven-jar-plugin:2.4, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Apache Maven Plugins - maven-resources-plugin:2.6, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Apache Maven Plugins - maven-site-plugin:3.3
+	- Apache Maven Plugins - maven-surefire-plugin:2.12.4, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
+	- Freme: Common - common:0.4-SNAPSHOT, Copyright 2015 Agro-Know, Deutsches Forschungszentrum für Künstliche Intelligenz, iMinds, Institut für Angewandte Informatik e. V. an der Universität Leipzig, Istituto Superiore Mario Boella, Tilde, Vistatec, WRIPL
+	- Gson - gson:2.3.1, Copyright 2015 The Apache Software Foundation. All Rights Reserved.
+	- License Maven Plugin - license-maven-plugin:2.3, Copyright 2008 Mycila (mathieu.carbou@gmail.com)
 
 -----------------------------------------------------------------------------
 
