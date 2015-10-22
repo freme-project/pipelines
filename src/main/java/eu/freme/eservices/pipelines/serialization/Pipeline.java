@@ -28,6 +28,7 @@ import java.util.List;
  */
 public class Pipeline {
 	private long id;
+	private long creationTime;
 	private String label;
 	private String description;
 	private boolean persist;
@@ -37,10 +38,11 @@ public class Pipeline {
 
 	@SuppressWarnings("unused")
 	public Pipeline(final String label, final String description, final List<SerializedRequest> serializedRequests) {
-		this(-1, label, description, false, null, null, serializedRequests);
+		this(-1, -1, label, description, false, null, null, serializedRequests);
 	}
 
 	public Pipeline(long id,
+					long creationTime,
 					final String label,
 					final String description,
 					boolean persist,
@@ -54,6 +56,7 @@ public class Pipeline {
 		this.owner = owner;
 		this.visibility = visibility;
 		this.serializedRequests = serializedRequests;
+		this.creationTime = creationTime;
 	}
 
 	@SuppressWarnings("unused")
@@ -122,6 +125,21 @@ public class Pipeline {
 	}
 
 	@SuppressWarnings("unused")
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	@SuppressWarnings("unused")
+	public long getCreationTime() {
+		return creationTime;
+	}
+
+	@SuppressWarnings("unused")
+	public void setCreationTime(long creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	@SuppressWarnings("unused")
 	public String isValid() {
 		if (label == null) {
 			return "No label given.";
@@ -143,6 +161,7 @@ public class Pipeline {
 		Pipeline pipeline = (Pipeline) o;
 
 		if (id != pipeline.id) return false;
+		if (creationTime != pipeline.creationTime) return false;
 		if (persist != pipeline.persist) return false;
 		if (!label.equals(pipeline.label)) return false;
 		if (!description.equals(pipeline.description)) return false;
@@ -155,6 +174,7 @@ public class Pipeline {
 	@Override
 	public int hashCode() {
 		int result = (int) (id ^ (id >>> 32));
+		result = 31 * result + (int) (creationTime ^ (creationTime >>> 32));
 		result = 31 * result + label.hashCode();
 		result = 31 * result + description.hashCode();
 		result = 31 * result + (persist ? 1 : 0);

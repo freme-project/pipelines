@@ -95,7 +95,7 @@ public class Serializer {
 	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
 	 */
 	public static String toJson(final Pipeline pipeline) {
-		return gson.toJson(pipeline);
+		return gson_pretty.toJson(pipeline);
 	}
 
 	/**
@@ -110,6 +110,7 @@ public class Serializer {
 		List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 		Pipeline pipelineObj = new Pipeline(
 				pipeline.getId(),
+				pipeline.getCreationTime(),
 				pipeline.getLabel(),
 				pipeline.getDescription(),
 				pipeline.isPersistent(),
@@ -151,6 +152,7 @@ public class Serializer {
 			List<SerializedRequest> serializedRequests = fromJson(pipeline.getSerializedRequests());
 			Pipeline pipelineObj = new Pipeline(
 					pipeline.getId(),
+					pipeline.getCreationTime(),
 					pipeline.getLabel(),
 					pipeline.getDescription(),
 					pipeline.isPersistent(),

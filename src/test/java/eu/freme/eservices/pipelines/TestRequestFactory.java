@@ -67,7 +67,7 @@ public class TestRequestFactory {
 	public void testPipelineMemberCheckValid() {
 		Gson gson = new Gson();
 		List<SerializedRequest> serializedReqs = Collections.singletonList(RequestFactory.createEntitySpotlight("nl"));
-		Pipeline pipeline = new Pipeline(1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", serializedReqs);
+		Pipeline pipeline = new Pipeline(1, 1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", serializedReqs);
 		String pipelineStr = gson.toJson(pipeline);
 		Pipeline pipeline2 = Serializer.templateFromJson(pipelineStr);
 		assertEquals(pipeline, pipeline2);
@@ -77,7 +77,7 @@ public class TestRequestFactory {
 	public void testPipelineMemberCheckValidInvalid() {
 		Gson gson = new Gson();
 		List<SerializedRequest> serializedReqs = Collections.singletonList(RequestFactory.createEntitySpotlight("nl"));
-		Pipeline pipeline = new Pipeline(1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", serializedReqs);
+		Pipeline pipeline = new Pipeline(1, 1, "label", "description", false, "Edgar Allan Poe", "PUBLIC", serializedReqs);
 		String pipelineStr = gson.toJson(pipeline);
 		String invalidPipelineStr = pipelineStr.replace("label", "labour");
 		try {
