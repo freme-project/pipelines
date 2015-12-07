@@ -26,7 +26,9 @@ import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gerald Haesendonck
@@ -38,9 +40,13 @@ public class PipelineService {
 	 * @param serializedRequests  Requests to different services, serialized in JSON.
 	 * @return                    The result of the pipeline.
 	 */
-	public PipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
+	@SuppressWarnings("unused")
+	public WrappedPipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
+		long start = System.currentTimeMillis();
+		Map<String, Long> serviceToDuration = new LinkedHashMap<>();
 		for (int reqNr = 0; reqNr < serializedRequests.size(); reqNr++) {
+			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
 			try {
 				lastResponse = execute(serializedRequest, lastResponse.getBody());
@@ -48,9 +54,13 @@ public class PipelineService {
 				throw new UnirestException("Request " + reqNr + ": " + e.getMessage());
 			} catch (IOException e) {
 				throw new IOException("Request " + reqNr + ": " + e.getMessage());
+			} finally {
+				long endOfRequest = System.currentTimeMillis();
+				serviceToDuration.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
 			}
 		}
-		return lastResponse;
+		long end = System.currentTimeMillis();
+		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
 	}
 
 	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
