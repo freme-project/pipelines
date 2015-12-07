@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
+import eu.freme.eservices.pipelines.core.WrappedPipelineResponse;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 
 import java.lang.reflect.Field;
@@ -69,6 +70,16 @@ public class Serializer {
 	}
 
 	/**
+	 * Converts a WrappedPipelineResponse to JSON.
+	 * @param response	The WrappedPipelineResponse to serialize.
+	 * @return			A JSON string representing the wrapped response.
+	 */
+	@SuppressWarnings("unused")
+	public static String toJson(final WrappedPipelineResponse response) {
+		return gson.toJson(response);
+	}
+
+	/**
 	 * Converts a JSON string to a list of requests.
 	 * @param serializedRequests	The JSON string of requests to convert.
 	 * @return						The list of requests represented by the JSON string.
@@ -94,6 +105,7 @@ public class Serializer {
 	 * 					the visibility (PUBLIC or PRIVATE) and the serialized requests.
 	 * @throws JsonSyntaxException	Something is wrong with the JSON syntax.	.
 	 */
+	@SuppressWarnings("unused")
 	public static String toJson(final Pipeline pipeline) {
 		return gson_pretty.toJson(pipeline);
 	}
