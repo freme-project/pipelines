@@ -10,17 +10,16 @@ import java.util.Map;
  * @author Gerald Haesendonck
  */
 public class WrappedPipelineResponse {
-	private final PipelineResponse pipelineResponse;
-	private final Map<String, Long> serviceToDuration;
-	private final long totalDuration;
+	private final Metadata metadata;
+	private final PipelineResponse content;
 
-	public WrappedPipelineResponse(PipelineResponse pipelineResponse, Map<String, Long> serviceToDuration, long totalDuration) {
-		this.pipelineResponse = pipelineResponse;
-		this.serviceToDuration = serviceToDuration;
-		this.totalDuration = totalDuration;
+	public WrappedPipelineResponse(PipelineResponse content, Map<String, Long> serviceToDuration, long totalDuration) {
+		this.content = content;
+		metadata = new Metadata(serviceToDuration, totalDuration);
 	}
 
-	public PipelineResponse getPipelineResponse() {
-		return pipelineResponse;
+	@SuppressWarnings("unused")
+	public PipelineResponse getContent() {
+		return content;
 	}
 }
