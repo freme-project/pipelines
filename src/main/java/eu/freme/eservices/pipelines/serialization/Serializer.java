@@ -18,7 +18,6 @@
 package eu.freme.eservices.pipelines.serialization;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
 import eu.freme.eservices.pipelines.core.WrappedPipelineResponse;
@@ -32,7 +31,7 @@ import java.util.*;
  */
 public class Serializer {
 	private final static Gson gson = new Gson();
-	private final static Gson gson_pretty = new GsonBuilder().setPrettyPrinting().create();
+	//private final static Gson gson_pretty = new GsonBuilder().setPrettyPrinting().create();
 
 	private static Set<String> requestFieldNames = new HashSet<>(5, 1);
 	static {
@@ -107,7 +106,7 @@ public class Serializer {
 	 */
 	@SuppressWarnings("unused")
 	public static String toJson(final Pipeline pipeline) {
-		return gson_pretty.toJson(pipeline);
+		return gson.toJson(pipeline);
 	}
 
 	/**
@@ -129,7 +128,7 @@ public class Serializer {
 				pipeline.getOwner().getName(),
 				pipeline.getVisibility().name(),
 				serializedRequests);
-		return gson_pretty.toJson(pipelineObj);
+		return gson.toJson(pipelineObj);
 	}
 
 	/**
@@ -173,7 +172,7 @@ public class Serializer {
 					serializedRequests);
 			pipelineInfos.add(pipelineObj);
 		}
-		return gson_pretty.toJson(pipelineInfos);
+		return gson.toJson(pipelineInfos);
 	}
 
 	/**
