@@ -44,7 +44,7 @@ public class PipelineService {
 	public WrappedPipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
 		long start = System.currentTimeMillis();
-		Map<String, Long> serviceToDuration = new LinkedHashMap<>();
+		Map<String, Long> executionTime = new LinkedHashMap<>();
 		for (int reqNr = 0; reqNr < serializedRequests.size(); reqNr++) {
 			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
@@ -56,11 +56,11 @@ public class PipelineService {
 				throw new IOException("Request " + reqNr + ": " + e.getMessage());
 			} finally {
 				long endOfRequest = System.currentTimeMillis();
-				serviceToDuration.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
+				executionTime.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
 			}
 		}
 		long end = System.currentTimeMillis();
-		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
+		return new WrappedPipelineResponse(lastResponse, executionTime, (end - start));
 	}
 
 	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
