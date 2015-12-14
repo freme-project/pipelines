@@ -127,6 +127,16 @@ Istituto Superiore Mario Boella, Tilde, Vistatec, WRIPL
 			<version>0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>eu.freme</groupId>
+			<artifactId>e-internationalization</artifactId>
+			<version>0.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
 			<groupId>com.mashape.unirest</groupId>
 			<artifactId>unirest-java</artifactId>
 			<version>1.4.6</version>

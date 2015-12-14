@@ -22,7 +22,11 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import eu.freme.common.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFSerializationFormats;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
+import eu.freme.i18n.api.EInternationalizationAPI;
+import eu.freme.i18n.okapi.nif.converter.ConversionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
@@ -35,6 +39,12 @@ import java.util.Map;
  */
 public class PipelineService {
 
+	@Autowired
+	private RDFSerializationFormats serializationFormats;
+
+	@Autowired
+	private EInternationalizationAPI eInternationalizationApi;
+
 	/**
 	 * Performs a chain of requests to other e-services (pipeline).
 	 * @param serializedRequests  Requests to different services, serialized in JSON.
@@ -42,6 +52,25 @@ public class PipelineService {
 	 */
 	@SuppressWarnings("unused")
 	public WrappedPipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
+
+		// determine mime types of first and last pipeline request
+		Conversion conversion;
+		boolean roundtrip = false; // true: convert HTML input to NIF, execute pipeline, convert back to HTML at the end.
+		if (serializedRequests.size() > 1) {
+			RDFConstants.RDFSerialization mime1 = serializedRequests.get(0).getInputMime(serializationFormats);
+			RDFConstants.RDFSerialization mime2 = serializedRequests.get(serializedRequests.size() - 1).getOutputMime(serializationFormats);
+			if (mime1.equals(RDFConstants.RDFSerialization.HTML) && mime1.equals(mime2)) {
+				roundtrip = true;
+				conversion = new Conversion(eInternationalizationApi);
+				try {
+					String nif = conversion.htmlToNif(serializedRequests.get(0).getBody());
+					serializedRequests.get(0).setBody(nif);
+				} catch (ConversionException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
 		long start = System.currentTimeMillis();
 		Map<String, Long> serviceToDuration = new LinkedHashMap<>();
@@ -49,7 +78,7 @@ public class PipelineService {
 			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
 			try {
-				lastResponse = execute(serializedRequest, lastResponse.getBody());
+				lastResponse = execute(serializedRequest, lastResponse.getBody(), roundtrip);
 			} catch (UnirestException e) {
 				throw new UnirestException("Request " + reqNr + ": " + e.getMessage());
 			} catch (IOException e) {
@@ -63,7 +92,7 @@ public class PipelineService {
 		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
 	}
 
-	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
+	private PipelineResponse execute(final SerializedRequest request, final String body, boolean roundtrip) throws UnirestException, IOException, ServiceException {
 		switch (request.getMethod()) {
 			case GET:
 				throw new UnsupportedOperationException("GET is not supported at this moment.");

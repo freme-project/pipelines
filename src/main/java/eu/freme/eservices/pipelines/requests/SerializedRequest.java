@@ -17,6 +17,9 @@
  */
 package eu.freme.eservices.pipelines.requests;
 
+import eu.freme.common.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFSerializationFormats;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -93,6 +96,42 @@ public class SerializedRequest {
 			return e.getMessage();
 		}
 		return "";
+	}
+
+	public RDFConstants.RDFSerialization getInputMime(final RDFSerializationFormats rdfSerializationFormats) {
+		String informat = (String)parameters.get("informat");
+		if (informat == null) {
+			informat = (String)parameters.get("f");
+		}
+		if (informat == null) {
+			informat = headers.get("content-type");
+		}
+		if (informat == null) {
+			informat = headers.get("Content-Type");
+		}
+		return informat != null ? rdfSerializationFormats.get(informat) : null;
+	}
+
+	public RDFConstants.RDFSerialization getOutputMime(final RDFSerializationFormats rdfSerializationFormats) {
+		String outformat = (String)parameters.get("outformat");
+		if (outformat == null) {
+			outformat = (String)parameters.get("o");
+		}
+		if (outformat == null) {
+			outformat = headers.get("accept");
+		}
+		if (outformat == null) {
+			outformat = headers.get("Accept");
+		}
+		return outformat != null ? rdfSerializationFormats.get(outformat) : null;
+	}
+
+	public void setInputMime() {
+		// TODO
+	}
+
+	public void setOutputMime() {
+		// TODO
 	}
 
 	@Override
