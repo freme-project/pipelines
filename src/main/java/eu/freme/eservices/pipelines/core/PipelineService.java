@@ -52,6 +52,7 @@ public class PipelineService {
 	 */
 	@SuppressWarnings("unused")
 	public WrappedPipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
+		Map<String, Long> serviceToDuration = new LinkedHashMap<>();
 
 		// determine mime types of first and last pipeline request
 		Conversion conversion = null;
@@ -63,8 +64,9 @@ public class PipelineService {
 				roundtrip = true;
 				conversion = new Conversion(eInternationalizationApi);
 				try {
-					// TODO: time conversion as it takes a long time!
+					long startOfRequest = System.currentTimeMillis();
 					String nif = conversion.htmlToNif(serializedRequests.get(0).getBody());
+					serviceToDuration.put("e-Internationalization (HTML -> NIF)", (System.currentTimeMillis() - startOfRequest));
 					serializedRequests.get(0).setBody(nif);
 				} catch (ConversionException e) {
 					e.printStackTrace();
@@ -74,7 +76,6 @@ public class PipelineService {
 
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
 		long start = System.currentTimeMillis();
-		Map<String, Long> serviceToDuration = new LinkedHashMap<>();
 		for (int reqNr = 0; reqNr < serializedRequests.size(); reqNr++) {
 			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
@@ -95,13 +96,13 @@ public class PipelineService {
 			} finally {
 				long endOfRequest = System.currentTimeMillis();
 				serviceToDuration.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
+				serviceToDuration.put("e-Internationalization (NIF -> HTML)", (System.currentTimeMillis() - startOfRequest));
 			}
 		}
 		if (roundtrip) {
+			long startOfRequest = System.currentTimeMillis();
 			String html = conversion.nifToHtml(lastResponse.getBody());
 			lastResponse = new PipelineResponse(html, RDFConstants.RDFSerialization.HTML.contentType());
-			System.out.println("html = " + html);
-			// TODO: what if error response returns?
 		}
 		long end = System.currentTimeMillis();
 		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
