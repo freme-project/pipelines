@@ -54,7 +54,7 @@ public class PipelineService {
 	public WrappedPipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
 
 		// determine mime types of first and last pipeline request
-		Conversion conversion;
+		Conversion conversion = null;
 		boolean roundtrip = false; // true: convert HTML input to NIF, execute pipeline, convert back to HTML at the end.
 		if (serializedRequests.size() > 1) {
 			RDFConstants.RDFSerialization mime1 = serializedRequests.get(0).getInputMime(serializationFormats);
@@ -63,6 +63,7 @@ public class PipelineService {
 				roundtrip = true;
 				conversion = new Conversion(eInternationalizationApi);
 				try {
+					// TODO: time conversion as it takes a long time!
 					String nif = conversion.htmlToNif(serializedRequests.get(0).getBody());
 					serializedRequests.get(0).setBody(nif);
 				} catch (ConversionException e) {
@@ -78,7 +79,15 @@ public class PipelineService {
 			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
 			try {
-				lastResponse = execute(serializedRequest, lastResponse.getBody(), roundtrip);
+				if (roundtrip) {
+					serializedRequest.getHeaders().put("content-type", RDFConstants.RDFSerialization.TURTLE.getMimeType());
+					serializedRequest.getHeaders().put("accept", RDFConstants.RDFSerialization.TURTLE.getMimeType());
+					serializedRequest.getParameters().remove("informat");
+					serializedRequest.getParameters().remove("f");
+					serializedRequest.getParameters().remove("outformat");
+					serializedRequest.getParameters().remove("o");
+				}
+				lastResponse = execute(serializedRequest, lastResponse.getBody());
 			} catch (UnirestException e) {
 				throw new UnirestException("Request " + reqNr + ": " + e.getMessage());
 			} catch (IOException e) {
@@ -88,11 +97,16 @@ public class PipelineService {
 				serviceToDuration.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
 			}
 		}
+		if (roundtrip) {
+			String html = conversion.nifToHtml(lastResponse.getBody());
+			System.out.println("html = " + html);
+			// TODO: put in response, change content-type
+		}
 		long end = System.currentTimeMillis();
 		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
 	}
 
-	private PipelineResponse execute(final SerializedRequest request, final String body, boolean roundtrip) throws UnirestException, IOException, ServiceException {
+	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
 		switch (request.getMethod()) {
 			case GET:
 				throw new UnsupportedOperationException("GET is not supported at this moment.");

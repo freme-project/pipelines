@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class Conversion {
 	private final EInternationalizationAPI eInternationalizationApi;
-	private String originalNIF = "";
+	private String skeletonNIF = "";
 
 	public Conversion(EInternationalizationAPI eInternationalizationApi) {
 		this.eInternationalizationApi = eInternationalizationApi;
@@ -43,9 +43,13 @@ public class Conversion {
 
 	public String htmlToNif(final String html) throws IOException, ConversionException {
 		try (InputStream in = IOUtils.toInputStream(html, StandardCharsets.UTF_8)) {
+			try (Reader reader = eInternationalizationApi.convertToTurtleWithMarkups(in, EInternationalizationAPI.MIME_TYPE_HTML)) {
+				skeletonNIF = IOUtils.toString(reader);
+			}
+		}
+		try (InputStream in = IOUtils.toInputStream(html, StandardCharsets.UTF_8)) {
 			try (Reader reader = eInternationalizationApi.convertToTurtle(in, EInternationalizationAPI.MIME_TYPE_HTML)) {
-				originalNIF = IOUtils.toString(reader);
-				return originalNIF;
+				return IOUtils.toString(reader);
 			}
 		}
 	}
@@ -53,11 +57,11 @@ public class Conversion {
 	public String nifToHtml(final String enrichedNIF) throws IOException {
 		try (
 				InputStream enrichedFile = IOUtils.toInputStream(enrichedNIF, StandardCharsets.UTF_8);
-				InputStream skeletonFile = IOUtils.toInputStream(originalNIF, StandardCharsets.UTF_8)
+				InputStream skeletonFile = IOUtils.toInputStream(skeletonNIF, StandardCharsets.UTF_8)
 		) {
 			try (Reader htmlReader = eInternationalizationApi.convertBack(skeletonFile, enrichedFile)) {
 				String html = IOUtils.toString(htmlReader);
-				originalNIF = "";
+				skeletonNIF = "";
 				return html;
 			}
 		}
