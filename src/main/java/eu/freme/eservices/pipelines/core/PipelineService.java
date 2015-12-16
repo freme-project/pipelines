@@ -80,8 +80,8 @@ public class PipelineService {
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
 			try {
 				if (roundtrip) {
-					serializedRequest.getHeaders().put("content-type", RDFConstants.RDFSerialization.TURTLE.getMimeType());
-					serializedRequest.getHeaders().put("accept", RDFConstants.RDFSerialization.TURTLE.getMimeType());
+					serializedRequest.getHeaders().put("content-type", RDFConstants.RDFSerialization.TURTLE.contentType());
+					serializedRequest.getHeaders().put("accept", RDFConstants.RDFSerialization.TURTLE.contentType());
 					serializedRequest.getParameters().remove("informat");
 					serializedRequest.getParameters().remove("f");
 					serializedRequest.getParameters().remove("outformat");
@@ -99,8 +99,9 @@ public class PipelineService {
 		}
 		if (roundtrip) {
 			String html = conversion.nifToHtml(lastResponse.getBody());
+			lastResponse = new PipelineResponse(html, RDFConstants.RDFSerialization.HTML.contentType());
 			System.out.println("html = " + html);
-			// TODO: put in response, change content-type
+			// TODO: what if error response returns?
 		}
 		long end = System.currentTimeMillis();
 		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
