@@ -26,6 +26,8 @@ import eu.freme.common.conversion.rdf.RDFSerializationFormats;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
 import eu.freme.i18n.api.EInternationalizationAPI;
 import eu.freme.i18n.okapi.nif.converter.ConversionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -38,6 +40,7 @@ import java.util.Map;
  * @author Gerald Haesendonck
  */
 public class PipelineService {
+	private final static Logger logger = LoggerFactory.getLogger(PipelineService.class);
 
 	@Autowired
 	private RDFSerializationFormats serializationFormats;
@@ -69,7 +72,8 @@ public class PipelineService {
 					executionTime.put("e-Internationalization (HTML -> NIF)", (System.currentTimeMillis() - startOfRequest));
 					serializedRequests.get(0).setBody(nif);
 				} catch (ConversionException e) {
-					e.printStackTrace();    // TODO  handle
+					logger.warn("Could not convert the HTLM contents to NIF. Tying to proceed without converting... Error: ", e);
+					roundtrip = false;
 				}
 			}
 		}
