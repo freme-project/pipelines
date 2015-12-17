@@ -10,11 +10,11 @@ import java.util.Map;
  * @author Gerald Haesendonck
  */
 public class Metadata {
-	private final Map<String, Long> serviceDurations;
-	private final long totalDuration;
+	private final Map<String, Long> executionTime;
+	private final long totalExecutionTime;
 
-	public Metadata(Map<String, Long> serviceToDuration, long totalDuration) {
-		this.serviceDurations = serviceToDuration;
-		this.totalDuration = totalDuration;
+	public Metadata(Map<String, Long> executionTime, long totalExecutionTime) {
+		this.executionTime = executionTime;
+		this.totalExecutionTime = totalExecutionTime;
 	}
 }

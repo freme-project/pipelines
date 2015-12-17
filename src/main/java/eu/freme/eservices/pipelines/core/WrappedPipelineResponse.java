@@ -13,9 +13,9 @@ public class WrappedPipelineResponse {
 	private final Metadata metadata;
 	private final PipelineResponse content;
 
-	public WrappedPipelineResponse(PipelineResponse content, Map<String, Long> serviceToDuration, long totalDuration) {
+	public WrappedPipelineResponse(PipelineResponse content, Map<String, Long> executionTime, long totalExecutionTime) {
 		this.content = content;
-		metadata = new Metadata(serviceToDuration, totalDuration);
+		metadata = new Metadata(executionTime, totalExecutionTime);
 	}
 
 	@SuppressWarnings("unused")

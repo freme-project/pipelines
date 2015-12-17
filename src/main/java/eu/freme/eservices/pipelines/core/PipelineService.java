@@ -22,11 +22,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import eu.freme.common.conversion.rdf.RDFConstants;
-import eu.freme.common.conversion.rdf.RDFSerializationFormats;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
-import eu.freme.i18n.api.EInternationalizationAPI;
-import eu.freme.i18n.okapi.nif.converter.ConversionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
@@ -52,7 +48,7 @@ public class PipelineService {
 	 */
 	@SuppressWarnings("unused")
 	public WrappedPipelineResponse chain(final List<SerializedRequest> serializedRequests) throws IOException, UnirestException, ServiceException {
-		Map<String, Long> serviceToDuration = new LinkedHashMap<>();
+		Map<String, Long> executionTime = new LinkedHashMap<>();
 
 		// determine mime types of first and last pipeline request
 		Conversion conversion = null;
@@ -76,6 +72,7 @@ public class PipelineService {
 
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
 		long start = System.currentTimeMillis();
+		Map<String, Long> executionTime = new LinkedHashMap<>();
 		for (int reqNr = 0; reqNr < serializedRequests.size(); reqNr++) {
 			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
@@ -95,17 +92,17 @@ public class PipelineService {
 				throw new IOException("Request " + reqNr + ": " + e.getMessage());
 			} finally {
 				long endOfRequest = System.currentTimeMillis();
-				serviceToDuration.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
-				serviceToDuration.put("e-Internationalization (NIF -> HTML)", (System.currentTimeMillis() - startOfRequest));
+				executionTime.put(serializedRequest.getEndpoint(), (endOfRequest - startOfRequest));
 			}
 		}
 		if (roundtrip) {
 			long startOfRequest = System.currentTimeMillis();
 			String html = conversion.nifToHtml(lastResponse.getBody());
 			lastResponse = new PipelineResponse(html, RDFConstants.RDFSerialization.HTML.contentType());
+			executionTime.put("e-Internationalization (NIF -> HTML)", (System.currentTimeMillis() - startOfRequest));
 		}
 		long end = System.currentTimeMillis();
-		return new WrappedPipelineResponse(lastResponse, serviceToDuration, (end - start));
+		return new WrappedPipelineResponse(lastResponse, executionTime, (end - start));
 	}
 
 	private PipelineResponse execute(final SerializedRequest request, final String body) throws UnirestException, IOException, ServiceException {
