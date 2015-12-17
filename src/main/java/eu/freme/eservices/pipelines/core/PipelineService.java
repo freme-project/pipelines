@@ -22,7 +22,11 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import eu.freme.common.conversion.rdf.RDFConstants;
+import eu.freme.common.conversion.rdf.RDFSerializationFormats;
 import eu.freme.eservices.pipelines.requests.SerializedRequest;
+import eu.freme.i18n.api.EInternationalizationAPI;
+import eu.freme.i18n.okapi.nif.converter.ConversionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
@@ -62,17 +66,16 @@ public class PipelineService {
 				try {
 					long startOfRequest = System.currentTimeMillis();
 					String nif = conversion.htmlToNif(serializedRequests.get(0).getBody());
-					serviceToDuration.put("e-Internationalization (HTML -> NIF)", (System.currentTimeMillis() - startOfRequest));
+					executionTime.put("e-Internationalization (HTML -> NIF)", (System.currentTimeMillis() - startOfRequest));
 					serializedRequests.get(0).setBody(nif);
 				} catch (ConversionException e) {
-					e.printStackTrace();
+					e.printStackTrace();    // TODO  handle
 				}
 			}
 		}
 
 		PipelineResponse lastResponse = new PipelineResponse(serializedRequests.get(0).getBody(), null);
 		long start = System.currentTimeMillis();
-		Map<String, Long> executionTime = new LinkedHashMap<>();
 		for (int reqNr = 0; reqNr < serializedRequests.size(); reqNr++) {
 			long startOfRequest = System.currentTimeMillis();
 			SerializedRequest serializedRequest = serializedRequests.get(reqNr);
