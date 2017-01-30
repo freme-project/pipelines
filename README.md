@@ -1,5 +1,7 @@
 # pipelines
 
+**This repository is deprecated. It has moved to the [basic services repository](https://github.com/freme-project/basic-services/tree/master/controllers/pipelines).**
+
 This repository is part of the FREME project ([official project home page](http://www.freme-project.eu/), [GitHub](https://github.com/freme-project)).
 It contains code of the Pipelining service, which allows to make a chain of requests to other services in one request.
 
